@@ -22,7 +22,7 @@ namespace Battleships.Tests
             int destroyersNum)
         {
             // Arrange
-            var board = new Board(10, 10, random);
+            var board = new Board(boardHeight, boardWidth, random);
             var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
 
             // Act

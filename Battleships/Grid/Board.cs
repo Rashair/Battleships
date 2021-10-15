@@ -94,7 +94,12 @@ namespace Battleships.Grid
 
         private void Put(Ship ship, Position pos)
         {
-
+            if (pos.Dir == Direction.Down)
+                for (int i = pos.YStart; i < ship.Size; ++i)
+                    board[i][pos.XStart] = Field.ShipUp;
+            else // pos.Dir == Direction.Right
+                for (int j = pos.XStart; j < ship.Size; ++j)
+                    board[pos.YStart][j] = Field.ShipUp;
         }
     }
 }
