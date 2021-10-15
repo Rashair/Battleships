@@ -44,7 +44,7 @@ namespace Battleships.Grid
         }
 
 
-        public void Init(Ship[] ships)
+        public void Init(IEnumerable<Ship> ships)
         {
             var areShipsValid = AreShipsValidForInit(ships, out var errors);
             if (!areShipsValid)
@@ -58,13 +58,13 @@ namespace Battleships.Grid
             }
         }
 
-        public bool AreShipsValidForInit(Ship[] ships, out IEnumerable<string> errors)
+        public bool AreShipsValidForInit(IEnumerable<Ship> ships, out IEnumerable<string> errors)
         {
             errors = BrokenRules(ships);
             return !errors.Any();
         }
 
-        private IEnumerable<string> BrokenRules(Ship[] ships)
+        private IEnumerable<string> BrokenRules(IEnumerable<Ship> ships)
         {
             yield break;
         }

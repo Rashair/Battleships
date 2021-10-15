@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Battleships.Grid;
 using Battleships.Ships;
@@ -25,9 +26,31 @@ namespace Battleships.Tests
             Assert.Equal(shipsAreaSum, board.UpFields);
         }
 
-        private Ship[] GetTestData_Init_ShouldGenerateAllShips()
+        private List<Ship> GetTestData_Init_ShouldGenerateAllShips(
+            int carriersNum = 5,
+            int battleshipsNum = 4,
+            int cruisersNum = 3,
+            int submarinesNum = 3,
+            int destroyersNum = 2)
         {
-            return Array.Empty<Ship>();
+            var ships = new List<Ship>();
+
+            for (int i = 0; i < carriersNum; ++i)
+                ships.Add(new Carrier());
+
+            for (int i = 0; i < battleshipsNum; ++i)
+                ships.Add(new Battleship());
+
+            for (int i = 0; i < cruisersNum; ++i)
+                ships.Add(new Cruiser());
+
+            for (int i = 0; i < submarinesNum; ++i)
+                ships.Add(new Submarine());
+
+            for (int i = 0; i < destroyersNum; ++i)
+                ships.Add(new Destroyer());
+
+            return ships;
         }
 
 
