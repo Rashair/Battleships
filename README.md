@@ -3,6 +3,7 @@ Simple simulation of Battleships game ([Wiki](https://en.wikipedia.org/wiki/Batt
 
 ## Assumptions
 1. Default settings:
+
 | No.  | Class of ship   | Size |
 | ---- | ----------------- | ------|
 | 1	| Carrier	      |5 |
