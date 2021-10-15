@@ -53,7 +53,7 @@ namespace Battleships.Grid
 
             foreach (var ship in ships)
             {
-                var position = GetRandomPositionForShip(ship.Size);
+                var position = GetRandomValidPositionForShip(ship.Size);
                 Put(ship, position);
             }
         }
@@ -69,20 +69,16 @@ namespace Battleships.Grid
             yield break;
         }
 
-        private Position GetRandomPositionForShip(int size)
+        private Position GetRandomValidPositionForShip(int size)
         {
-            Direction dir = random.Next(2) == 0 ? Direction.Down : Direction.Right;
-            int maxHeight = Height;
-            int maxWidth = Width;
-            if (dir == Direction.Down)
-                maxHeight -= size;
-            else // dir == Direction.Right
-                maxWidth -= size;
-
+            Direction dir = DirectionExtensions.FromInt(random.Next(2));
+            int maxHeight = Height - size * dir.GetYCoefficient();
+            int maxWidth = Width - size * dir.GetXCoefficient();
             int yStart = random.Next(maxHeight);
             int xStart = random.Next(maxWidth);
 
             // TODO: Validate if not taken
+
 
             return new Position
             {
@@ -94,12 +90,13 @@ namespace Battleships.Grid
 
         private void Put(Ship ship, Position pos)
         {
-            if (pos.Dir == Direction.Down)
-                for (int i = pos.YStart; i < ship.Size; ++i)
-                    board[i][pos.XStart] = Field.ShipUp;
-            else // pos.Dir == Direction.Right
-                for (int j = pos.XStart; j < ship.Size; ++j)
-                    board[pos.YStart][j] = Field.ShipUp;
+            int yCoefficient = pos.Dir.GetYCoefficient();
+            int xCoefficient = pos.Dir.GetXCoefficient();
+
+            for (int i = 0; i < ship.Size; ++i)
+            {
+                board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = Field.ShipUp;
+            }
         }
     }
 }

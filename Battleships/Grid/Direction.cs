@@ -1,8 +1,8 @@
 ﻿namespace Battleships.Grid
 {
-    enum Direction
+    public enum Direction
     {
-        Down,
-        Right,
+        Down = 0,
+        Right = 1,
     }
 }
