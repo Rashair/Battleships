@@ -3,7 +3,7 @@ Simple simulation of Battleships game ([Wiki](https://en.wikipedia.org/wiki/Batt
 
 ## Assumptions
 1. Default settings:
-Board size: 10x10
+Board size: 12x12
 
 | Class of ship   | Size | No. of ships |
 | --------------- | ---- | ------------ |

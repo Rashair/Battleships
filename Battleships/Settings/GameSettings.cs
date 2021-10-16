@@ -2,8 +2,8 @@ namespace Battleships.Settings
 {
     public record GameSettings
     {
-        public int BoardHeight { get; init; } = 10;
-        public int BoardWidth { get; init; } = 10;
+        public int BoardHeight { get; init; } = 12;
+        public int BoardWidth { get; init; } = 12;
 
         public int CarriersNum { get; init; } = 1;
         public int BattleshipsNum { get; init; } = 2;
