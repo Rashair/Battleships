@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Ships
 {
-    public class Cruiser : Ship
+    public sealed record Cruiser : Ship
     {
         public override int Size => 3;
     }
