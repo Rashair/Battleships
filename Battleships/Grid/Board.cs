@@ -14,6 +14,7 @@ namespace Battleships.Grid
 
         public int Width => board[0].Length;
         public int Height => board.Length;
+        public int BoardArea => Height * Width;
         public int UpFields { get; set; }
 
         public Field this[int y, int x]
@@ -68,10 +69,18 @@ namespace Battleships.Grid
 
         private IEnumerable<string> BrokenRules(IEnumerable<Ship> ships)
         {
-            if (ships.Sum(x => x.Size) > Width * Height)
-                yield return "Sum of ships size cannot exceed board area";
+            int shipsAreaSum = 0;
+            foreach (var ship in ships)
+            {
+                if (ship.Size > Width && ship.Size > Height)
+                {
+                    yield return $"Ship size: {ship.Size} cannot exceed both board dimensions: {Height}x{Width}!";
+                }
+                shipsAreaSum += ship.Size;
+            }
 
-            yield break;
+            if (shipsAreaSum > BoardArea)
+                yield return $"Sum of ships size:{shipsAreaSum} cannot exceed board area: {BoardArea}!";
         }
 
         private Position GetRandomValidPositionForShip(int size)
