@@ -7,7 +7,7 @@ namespace Battleships.Grid
 {
     public class Board
     {
-        public const int MaxPositioningAttempts = 1000;
+        public const int MaxPositioningAttempts = 100;
 
         private readonly Random random;
         private readonly Field[][] board;

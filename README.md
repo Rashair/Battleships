@@ -4,13 +4,13 @@ Simple simulation of Battleships game ([Wiki](https://en.wikipedia.org/wiki/Batt
 ## Assumptions
 1. Default settings:
 
-| No.  | Class of ship   | Size |
-| ---- | ----------------- | ------|
-| 1	| Carrier	      |5 |
-| 2	| Battleship      |4 |
-| 3	| Cruiser	      |3 |
-| 4	| Submarine	      |3 |
-| 5	| Destroyer	      |2 |
+| Class of ship   | Size | No. of ships |
+| --------------- | ---- | ------------ |
+| Carrier	      |  5   |      1       |
+| Battleship      |  4   |      2       |
+| Cruiser	      |  3   |      3       |
+| Submarine	      |  3   |      3       |
+| Destroyer	      |  2   |      4       |
 
 2. Ships can touch each other, but they can't occupy the same grid space
 

@@ -52,13 +52,13 @@ namespace Battleships.Tests
         new List<object[]>
         {
             new object[] { 10, 10,  // even size
-                5, 4, 3, 3, 2 },
+                4, 3, 3, 2, 1 },
             new object[] { 9, 9,    // odd size
-                5, 4, 3, 3, 2 },
+                4, 3, 3, 2, 1 },
             new object[] { 25, 5,   // very high
-                5, 4, 3, 3, 2 },
+                4, 3, 3, 2, 1 },
             new object[] { 5, 24,   // very wide
-                5, 4, 3, 3, 2 },
+                4, 3, 3, 2, 1 },
             new object[]{ 12, 12,  // only destroyers
                 0, 0, 0, 0, 18},
             new object[]{ 20, 1,   // only carriers + full board
@@ -120,9 +120,9 @@ namespace Battleships.Tests
                new object[] { 1, 1,   // 1 x 1
                     0, 1, 0, 0, 0 },
                 new object[] { 4, 4,   // even size
-                    5, 4, 3, 3, 2 },
+                    4, 3, 3, 2, 1 },
                 new object[] { 3, 3,   // odd size
-                    5, 4, 3, 3, 2 },
+                    4, 3, 3, 2, 1 },
                 new object[] { 25, 2,  // very high
                     6, 4, 4, 4, 2 },
                 new object[] { 2, 24,  // very wide
