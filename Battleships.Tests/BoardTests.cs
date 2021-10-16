@@ -32,7 +32,7 @@ namespace Battleships.Tests
 
             // Assert
             // Area sum matches
-            var shipsAreaSum = ships.Select(x => x.Size).Sum();
+            var shipsAreaSum = ships.Sum(x => x.Size);
             Assert.Equal(shipsAreaSum, board.UpFields);
 
             // Up-fields set correctly
@@ -47,6 +47,8 @@ namespace Battleships.Tests
             }
             Assert.Equal(upFieldsCount, board.UpFields);
         }
+
+
 
         public static IEnumerable<object[]> BoardAndShips_Valid_TestData =>
         new List<object[]>
@@ -66,12 +68,13 @@ namespace Battleships.Tests
             new object[]{ 3, 3,    // small board
                 1, 1, 1, 0, 0},
             new object[]{ 9, 9,    // empty
-                0, 0, 0, 0, 0}
+                0, 0, 0, 0, 0},
+            new object[] { 2, 24,  // regression - generates ship outside of board
+                    5, 4, 3, 3, 2 },
         };
 
-
         [Theory(Timeout = DefaultTimeoutMs)]
-        [MemberData(nameof(BoardAndShips_Valid_TestData))]
+        [MemberData(nameof(BoardAndShips_ExceedArea_TestData))]
         public void Init_WhenShipsAreaExceedBoardArea_ShouldThrow(
             int boardHeight, int boardWidth,
             int carriersNum,
