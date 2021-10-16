@@ -1,4 +1,5 @@
 using Battleships.Grid;
+using System;
 
 public static class DirectionExtensions
 {
@@ -20,10 +21,5 @@ public static class DirectionExtensions
             Direction.Down => 1,
             _ => 0,
         };
-    }
-
-    public static Direction FromInt(int val)
-    {
-        return val == 0 ? Direction.Down : Direction.Right;
     }
 }

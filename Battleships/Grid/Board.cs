@@ -75,13 +75,13 @@ namespace Battleships.Grid
             {
                 if (ship.Size > Width && ship.Size > Height)
                 {
-                    yield return $"Ship size: {ship.Size} cannot exceed both board dimensions: {Height}x{Width}!";
+                    yield return $"Ship size: {ship.Size} cannot exceed both board dimensions: {Height}x{Width}.";
                 }
                 shipsAreaSum += ship.Size;
             }
 
             if (shipsAreaSum > BoardArea)
-                yield return $"Sum of ships size: {shipsAreaSum} cannot exceed board area: {BoardArea}!";
+                yield return $"Sum of ships size: {shipsAreaSum} cannot exceed board area: {BoardArea}.";
         }
 
         private Position GetRandomValidPositionForShip(int size)
@@ -142,24 +142,13 @@ namespace Battleships.Grid
 
         private void Put(Ship ship, Position pos)
         {
-            SetFieldsForShip(ship, pos, Field.ShipUp);
-        }
-
-        private void Remove(Ship ship, Position pos)
-        {
-            SetFieldsForShip(ship, pos, Field.Empty);
-        }
-
-        private void SetFieldsForShip(Ship ship, Position pos, Field value)
-        {
             int yCoefficient = pos.Dir.GetYCoefficient();
             int xCoefficient = pos.Dir.GetXCoefficient();
 
             for (int i = 0; i < ship.Size; ++i)
             {
-                board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = value;
-                if (value == Field.ShipUp)
-                    ++UpFields;
+                board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = Field.ShipUp;
+                ++UpFields;
             }
         }
     }
