@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Battleships.Grid;
+using Battleships.Settings;
 using Battleships.Ships;
 using Xunit;
 
@@ -15,17 +16,11 @@ namespace Battleships.Tests
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(BoardAndShips_Valid_TestData))]
-        public void Init_ShouldGenerateAllShips(
-            int boardHeight, int boardWidth,
-            int carriersNum,
-            int battleshipsNum,
-            int cruisersNum,
-            int submarinesNum,
-            int destroyersNum)
+        public void Init_ShouldGenerateAllShips(GameSettings gameSettings)
         {
             // Arrange
-            var board = new Board(boardWidth, boardHeight, random);
-            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
+            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
+            var ships = ShipsGenerator.Generate(gameSettings);
 
             // Act
             board.Init(ships);
@@ -51,37 +46,96 @@ namespace Battleships.Tests
         public static IEnumerable<object[]> BoardAndShips_Valid_TestData =>
         new List<object[]>
         {
-            new object[] { 10, 10,  // even size
-                4, 3, 3, 2, 1 },
-            new object[] { 9, 9,    // odd size
-                4, 3, 3, 2, 1 },
-            new object[] { 25, 5,   // very high
-                4, 3, 3, 2, 1 },
-            new object[] { 5, 24,   // very wide
-                4, 3, 3, 2, 1 },
-            new object[]{ 12, 12,  // only destroyers
-                0, 0, 0, 0, 18},
-            new object[]{ 20, 2,   // only carriers + full board
-                10, 0, 0, 0, 0},
-            new object[]{ 3, 3,    // small board
-                1, 1, 1, 0, 0},
-            new object[]{ 9, 9,    // empty
-                0, 0, 0, 0, 0}
+            new object[] { new GameSettings   // even size 
+{
+BoardHeight = 10,
+BoardWidth = 10,
+CarriersNum = 1,
+BattleshipsNum = 2,
+CruisersNum = 3,
+SubmarinesNum = 3,
+DestroyersNum = 4,
+}},
+            new object[] { new GameSettings     // odd size 
+{
+BoardHeight = 9,
+BoardWidth = 9,
+CarriersNum = 1,
+BattleshipsNum = 2,
+CruisersNum = 3,
+SubmarinesNum = 3,
+DestroyersNum = 4,
+}},
+            new object[] { new GameSettings    // very high 
+{
+BoardHeight = 25,
+BoardWidth = 5,
+CarriersNum = 1,
+BattleshipsNum = 2,
+CruisersNum = 3,
+SubmarinesNum = 3,
+DestroyersNum = 4,
+}},
+            new object[] { new GameSettings    // very wide 
+{
+BoardHeight = 5,
+BoardWidth = 24,
+CarriersNum = 1,
+BattleshipsNum = 2,
+CruisersNum = 3,
+SubmarinesNum = 3,
+DestroyersNum = 4,
+}},
+            new object[] { new GameSettings   // only destroyers 
+{
+BoardHeight = 12,
+BoardWidth = 12,
+CarriersNum = 18,
+BattleshipsNum = 0,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 0,
+}},
+            new object[] { new GameSettings    // only destroyers + full board 
+{
+BoardHeight = 20,
+BoardWidth = 2,
+CarriersNum = 0,
+BattleshipsNum = 0,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 10,
+}},
+            new object[] { new GameSettings     // small board 
+{
+BoardHeight = 3,
+BoardWidth = 3,
+CarriersNum = 0,
+BattleshipsNum = 0,
+CruisersNum = 1,
+SubmarinesNum = 1,
+DestroyersNum = 1,
+}},
+            new object[] { new GameSettings     // empty 
+{
+BoardHeight = 9,
+BoardWidth = 9,
+CarriersNum = 0,
+BattleshipsNum = 0,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 0,
+}},
         };
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(BoardAndShips_Timeout_TestData))]
         public void Init_WhenItIsNotPossibleToGenerateValidPositions_ShouldThrowTimeoutException(
-            int boardHeight, int boardWidth,
-            int carriersNum,
-            int battleshipsNum,
-            int cruisersNum,
-            int submarinesNum,
-            int destroyersNum)
+           GameSettings gameSettings)
         {
             // Arrange
-            var board = new Board(boardWidth, boardHeight, random);
-            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
+            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
+            var ships = ShipsGenerator.Generate(gameSettings);
 
             // Act && Assert
             var ex = Assert.Throws<TimeoutException>(() => board.Init(ships));
@@ -91,23 +145,26 @@ namespace Battleships.Tests
         public static IEnumerable<object[]> BoardAndShips_Timeout_TestData =>
         new List<object[]>
         {
-            new object[] { 2, 24,  // regression - generates ship outside of board
-                    4, 4, 3, 3, 1 },
+            new object[] { new GameSettings   // regression - generates ship outside of board 
+{
+BoardHeight = 2,
+BoardWidth = 24,
+CarriersNum = 1,
+BattleshipsNum = 3,
+CruisersNum = 3,
+SubmarinesNum = 4,
+DestroyersNum = 4,
+}},
         };
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(BoardAndShips_ExceedArea_TestData))]
         public void Init_WhenShipsAreaExceedBoardArea_ShouldThrow(
-            int boardHeight, int boardWidth,
-            int carriersNum,
-            int battleshipsNum,
-            int cruisersNum,
-            int submarinesNum,
-            int destroyersNum)
+            GameSettings gameSettings)
         {
             // Arrange
-            var board = new Board(boardWidth, boardHeight, random);
-            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
+            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
+            var ships = ShipsGenerator.Generate(gameSettings);
 
             // Act && Assert
             var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));
@@ -117,37 +174,95 @@ namespace Battleships.Tests
         public static IEnumerable<object[]> BoardAndShips_ExceedArea_TestData =>
             new List<object[]>
             {
-               new object[] { 1, 1,   // 1 x 1
-                    1, 0, 0, 0, 0 },
-                new object[] { 4, 4,   // even size
-                    4, 3, 3, 2, 1 },
-                new object[] { 3, 3,   // odd size
-                    4, 3, 3, 2, 1 },
-                new object[] { 25, 2,  // very high
-                    6, 4, 4, 4, 2 },
-                new object[] { 2, 24,  // very wide
-                    5, 4, 3, 3, 3 },
-                new object[]{ 10, 10,  // only destroyers
-                    0, 0, 0, 0, 21},
-                new object[]{ 20, 1,   // only carriers
-                    21, 0, 0, 0, 0},
-                new object[]{ 3, 3,    // small board
-                    6, 1, 1, 0, 0},
+               new object[] { new GameSettings    // 1 x 1 
+{
+BoardHeight = 1,
+BoardWidth = 1,
+CarriersNum = 0,
+BattleshipsNum = 0,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 1,
+}},
+                new object[] { new GameSettings    // even size 
+{
+BoardHeight = 4,
+BoardWidth = 4,
+CarriersNum = 1,
+BattleshipsNum = 2,
+CruisersNum = 3,
+SubmarinesNum = 3,
+DestroyersNum = 4,
+}},
+                new object[] { new GameSettings    // odd size 
+{
+BoardHeight = 3,
+BoardWidth = 3,
+CarriersNum = 1,
+BattleshipsNum = 2,
+CruisersNum = 3,
+SubmarinesNum = 3,
+DestroyersNum = 4,
+}},
+                new object[] { new GameSettings   // very high 
+{
+BoardHeight = 25,
+BoardWidth = 2,
+CarriersNum = 2,
+BattleshipsNum = 4,
+CruisersNum = 4,
+SubmarinesNum = 4,
+DestroyersNum = 6,
+}},
+                new object[] { new GameSettings   // very wide 
+{
+BoardHeight = 2,
+BoardWidth = 24,
+CarriersNum = 3,
+BattleshipsNum = 3,
+CruisersNum = 3,
+SubmarinesNum = 4,
+DestroyersNum = 5,
+}},
+                new object[] { new GameSettings   // only carriers 
+{
+BoardHeight = 10,
+BoardWidth = 10,
+CarriersNum = 21,
+BattleshipsNum = 0,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 0,
+}},
+                new object[] { new GameSettings    // only destroyers 
+{
+BoardHeight = 20,
+BoardWidth = 1,
+CarriersNum = 0,
+BattleshipsNum = 0,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 21,
+}},
+                new object[] { new GameSettings     // small board 
+{
+BoardHeight = 3,
+BoardWidth = 3,
+CarriersNum = 0,
+BattleshipsNum = 0,
+CruisersNum = 1,
+SubmarinesNum = 1,
+DestroyersNum = 6,
+}},
             };
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(BoardAndShips_ShipSizeExceedsDimensions_TestData))]
         public void Init_WhenShipSizeExceedsDimensionOfBoard_ShouldThrow(
-            int boardHeight, int boardWidth,
-            int carriersNum,
-            int battleshipsNum,
-            int cruisersNum,
-            int submarinesNum,
-            int destroyersNum)
+            GameSettings gameSettings)
         {
-            var board = new Board(boardWidth, boardHeight, random);
-            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum,
-                submarinesNum, destroyersNum);
+            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
+            var ships = ShipsGenerator.Generate(gameSettings);
 
             // Act && Assert
             var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));
@@ -157,42 +272,46 @@ namespace Battleships.Tests
         public static IEnumerable<object[]> BoardAndShips_ShipSizeExceedsDimensions_TestData =>
            new List<object[]>
            {
-                new object[] { 3, 3,   // area fits, but not dimensions
-                    0, 0, 0, 1, 0 },
-                new object[] { 2, 3,   // area fits, but not dimensions
-                    0, 0, 0, 1, 0 },
-                new object[] { 2, 3,   // one fits, second not
-                    0, 1, 0, 1, 0 },
-                new object[] { 4, 4,   // only biggest does not fit
-                    1, 1, 1, 1, 1 },
+                new object[] { new GameSettings    // area fits, but not dimensions 
+{
+BoardHeight = 3,
+BoardWidth = 3,
+CarriersNum = 0,
+BattleshipsNum = 1,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 0,
+}},
+                new object[] { new GameSettings    // area fits, but not dimensions 
+{
+BoardHeight = 2,
+BoardWidth = 3,
+CarriersNum = 0,
+BattleshipsNum = 1,
+CruisersNum = 0,
+SubmarinesNum = 0,
+DestroyersNum = 0,
+}},
+                new object[] { new GameSettings    // one fits, second not 
+{
+BoardHeight = 2,
+BoardWidth = 3,
+CarriersNum = 0,
+BattleshipsNum = 1,
+CruisersNum = 0,
+SubmarinesNum = 1,
+DestroyersNum = 0,
+}},
+                new object[] { new GameSettings    // only biggest does not fit 
+{
+BoardHeight = 4,
+BoardWidth = 4,
+CarriersNum = 1,
+BattleshipsNum = 1,
+CruisersNum = 1,
+SubmarinesNum = 1,
+DestroyersNum = 1,
+}},
            };
-
-        private static List<Ship> GenerateShips(
-           int destroyersNum = 4,
-           int submarinesNum = 3,
-           int cruisersNum = 3,
-           int battleshipsNum = 2,
-           int carriersNum = 1
-           )
-        {
-            var ships = new List<Ship>();
-
-            for (int i = 0; i < carriersNum; ++i)
-                ships.Add(new Carrier());
-
-            for (int i = 0; i < battleshipsNum; ++i)
-                ships.Add(new Battleship());
-
-            for (int i = 0; i < cruisersNum; ++i)
-                ships.Add(new Cruiser());
-
-            for (int i = 0; i < submarinesNum; ++i)
-                ships.Add(new Submarine());
-
-            for (int i = 0; i < destroyersNum; ++i)
-                ships.Add(new Destroyer());
-
-            return ships;
-        }
     }
 }
