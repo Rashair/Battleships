@@ -14,6 +14,10 @@ Simple simulation of Battleships game ([Wiki](https://en.wikipedia.org/wiki/Batt
 
 2. Ships can touch each other, but they can't occupy the same grid space
 
+3. Placement of the ships is generated randomly, but can fail (it's non-deterministic).
+In such case User can retry generation with different Game parameters.
+ 
+
 
 
 
