@@ -9,9 +9,11 @@ namespace Battleships.Tests
 {
     public class BoardTests
     {
+        public const int DefaultTimeoutMs = 1000;
+
         private readonly Random random = new(1234);
 
-        [Theory(Timeout = 1000)]
+        [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(BoardAndShips_Valid_TestData))]
         public void Init_ShouldGenerateAllShips(
             int boardHeight, int boardWidth,
@@ -68,32 +70,42 @@ namespace Battleships.Tests
         };
 
 
-        [Fact]
-        public void Init_WhenShipsAreaExceedBoardArea_ShouldThrow()
+        [Theory(Timeout = DefaultTimeoutMs)]
+        [MemberData(nameof(BoardAndShips_Valid_TestData))]
+        public void Init_WhenShipsAreaExceedBoardArea_ShouldThrow(
+            int boardHeight, int boardWidth,
+            int carriersNum,
+            int battleshipsNum,
+            int cruisersNum,
+            int submarinesNum,
+            int destroyersNum)
         {
+            // Arrange
+            var board = new Board(boardHeight, boardWidth, random);
+            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
 
+            // Act && Assert
+            Assert.Throws<ArgumentException>(() => board.Init(ships));
         }
 
         public static IEnumerable<object[]> BoardAndShips_ExceedArea_TestData =>
-       new List<object[]>
-       {
-            new object[] { 10, 10,  // even size
-                5, 5, 3, 3, 2 },
-            new object[] { 9, 9,    // odd size
-                5, 4, 3, 3, 2 },
-            new object[] { 25, 5,   // very high
-                5, 4, 3, 3, 2 },
-            new object[] { 5, 24,   // very wide
-                5, 4, 3, 3, 2 },
-            new object[]{ 10, 10,  // only destroyers
-                0, 0, 0, 0, 19},
-            new object[]{ 20, 1,   // only carriers + full board
-                20, 0, 0, 0, 0},
-            new object[]{ 3, 3,    // small board
-                1, 1, 1, 0, 0},
-            new object[]{ 9, 9,    // empty
-                0, 0, 0, 0, 0}
-       };
+            new List<object[]>
+            {
+                new object[] { 4, 4,  // even size
+                    5, 4, 3, 3, 2 },
+                new object[] { 3, 3,    // odd size
+                    5, 4, 3, 3, 2 },
+                new object[] { 25, 2,   // very high
+                    5, 4, 3, 3, 2 },
+                new object[] { 2, 24,   // very wide
+                    5, 4, 3, 3, 2 },
+                new object[]{ 10, 10,  // only destroyers
+                    0, 0, 0, 0, 21},
+                new object[]{ 20, 1,   // only carriers + full board
+                    21, 0, 0, 0, 0},
+                new object[]{ 3, 3,    // small board
+                    1, 1, 1, 0, 0},
+            };
 
         [Fact]
         public void Init_WhenShipSizeExceedsDimensionOfBoard_ShouldThrow()
