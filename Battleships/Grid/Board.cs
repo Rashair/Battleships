@@ -51,7 +51,8 @@ namespace Battleships.Grid
         {
             var areShipsValid = AreShipsValidForInit(ships, out var errors);
             if (!areShipsValid)
-                throw new ArgumentException($"Ships are not valid for this board: {string.Join(Environment.NewLine, errors)}",
+                throw new ArgumentException($"Ships are not valid for this board:{Environment.NewLine}" +
+                    string.Join(Environment.NewLine, errors),
                     nameof(ships));
 
             foreach (var ship in ships)
@@ -80,7 +81,7 @@ namespace Battleships.Grid
             }
 
             if (shipsAreaSum > BoardArea)
-                yield return $"Sum of ships size:{shipsAreaSum} cannot exceed board area: {BoardArea}!";
+                yield return $"Sum of ships size: {shipsAreaSum} cannot exceed board area: {BoardArea}!";
         }
 
         private Position GetRandomValidPositionForShip(int size)

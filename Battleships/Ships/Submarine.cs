@@ -2,6 +2,6 @@
 {
     public class Submarine : Ship
     {
-        public override int Size => 4;
+        public override int Size => 3;
     }
 }

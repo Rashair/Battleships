@@ -92,7 +92,7 @@ namespace Battleships.Tests
         new List<object[]>
         {
             new object[] { 2, 24,  // regression - generates ship outside of board
-                    5, 4, 3, 3, 2 },
+                    4, 4, 3, 3, 1 },
         };
 
         [Theory(Timeout = DefaultTimeoutMs)]
@@ -165,11 +165,12 @@ namespace Battleships.Tests
            };
 
         private static List<Ship> GenerateShips(
-           int carriersNum = 5,
-           int battleshipsNum = 4,
-           int cruisersNum = 3,
+           int destroyersNum = 4,
            int submarinesNum = 3,
-           int destroyersNum = 2)
+           int cruisersNum = 3,
+           int battleshipsNum = 2,
+           int carriersNum = 1
+           )
         {
             var ships = new List<Ship>();
 
