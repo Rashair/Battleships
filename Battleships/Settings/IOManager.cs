@@ -1,7 +1,9 @@
 ﻿using Battleships.Grid;
 using Battleships.Grid.Helpers;
 using System;
+using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace Battleships.Settings
 {
@@ -12,7 +14,7 @@ namespace Battleships.Settings
 
         public IOManager(TextReader? inputReader = null)
         {
-            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            Console.OutputEncoding = Encoding.UTF8;
             this.reader = inputReader ?? Console.In;
             this.writer = Console.Out;
         }
@@ -68,14 +70,24 @@ namespace Battleships.Settings
 
         public void WriteBoard(Board board)
         {
+            WriteRow(2 * board.Width, "-");
             for (int y = 0; y < board.Height; ++y)
             {
                 for (int x = 0; x < board.Width; ++x)
                 {
                     Write(board[y, x].ToFormattedString());
+                    Write("|");
                 }
                 WriteLine();
             }
+            WriteRow(2 * board.Width, "-");
+        }
+
+        private void WriteRow(int width, string character)
+        {
+            for (int x = 0; x < width; ++x)
+                Write(character);
+            WriteLine();
         }
     }
 }

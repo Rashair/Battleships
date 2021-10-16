@@ -44,6 +44,7 @@ do
 
 ioManager.WriteLine("The boards are:");
 ioManager.WriteBoard(boardA);
+ioManager.WriteLine();
 ioManager.WriteBoard(boardB);
 
 ioManager.ReadLine();
