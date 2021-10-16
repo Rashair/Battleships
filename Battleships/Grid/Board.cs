@@ -7,6 +7,8 @@ namespace Battleships.Grid
 {
     public class Board
     {
+        public const int MaxPositioningAttempts = 50;
+
         private readonly Random random;
         private readonly Field[][] board;
 
@@ -69,33 +71,70 @@ namespace Battleships.Grid
             yield break;
         }
 
+        /// <summary>
+        /// Returns valid position 
+        /// </summary>
         private Position GetRandomValidPositionForShip(int size)
         {
-            Direction dir = DirectionExtensions.FromInt(random.Next(2));
-            int maxHeight = Height - size * dir.GetYCoefficient();
-            int maxWidth = Width - size * dir.GetXCoefficient();
-            int yStart = random.Next(maxHeight);
-            int xStart = random.Next(maxWidth);
-
-            // TODO: Validate if not taken
-
-
-            return new Position
+            Position pos;
+            int attempt = 0;
+            do
             {
-                YStart = yStart,
-                XStart = xStart,
-                Dir = dir
-            };
+                ++attempt;
+                Direction dir = DirectionExtensions.FromInt(random.Next(2));
+                int maxHeight = Height - size * dir.GetYCoefficient();
+                int maxWidth = Width - size * dir.GetXCoefficient();
+                int yStart = random.Next(maxHeight);
+                int xStart = random.Next(maxWidth);
+
+                pos = new Position
+                {
+                    YStart = yStart,
+                    XStart = xStart,
+                    Dir = dir
+                };
+            } while (attempt < MaxPositioningAttempts && !IsPositionValid(pos, size));
+
+            if (attempt == MaxPositioningAttempts)
+                throw new TimeoutException("Unable to place the ship correctly");
+
+            return pos;
+        }
+
+        private bool IsPositionValid(Position pos, int shipSize)
+        {
+            int yCoefficient = pos.Dir.GetYCoefficient();
+            int xCoefficient = pos.Dir.GetXCoefficient();
+
+            for (int i = 0; i < shipSize; ++i)
+            {
+                if (board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] != Field.Empty)
+                    return false;
+            }
+
+            return true;
         }
 
         private void Put(Ship ship, Position pos)
+        {
+            SetFieldsForShip(ship, pos, Field.ShipUp);
+        }
+
+        private void Remove(Ship ship, Position pos)
+        {
+            SetFieldsForShip(ship, pos, Field.Empty);
+        }
+
+        private void SetFieldsForShip(Ship ship, Position pos, Field value)
         {
             int yCoefficient = pos.Dir.GetYCoefficient();
             int xCoefficient = pos.Dir.GetXCoefficient();
 
             for (int i = 0; i < ship.Size; ++i)
             {
-                board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = Field.ShipUp;
+                board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = value;
+                if (value == Field.ShipUp)
+                    ++UpFields;
             }
         }
     }

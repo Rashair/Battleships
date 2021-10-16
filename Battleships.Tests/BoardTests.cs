@@ -9,10 +9,10 @@ namespace Battleships.Tests
 {
     public class BoardTests
     {
-        private readonly Random random = new(123);
+        private readonly Random random = new(1234);
 
-        [Theory]
-        [MemberData(nameof(BoardAndShipsTestData))]
+        [Theory(Timeout = 1000)]
+        [MemberData(nameof(BoardAndShips_Valid_TestData))]
         public void Init_ShouldGenerateAllShips(
             int boardHeight, int boardWidth,
             int carriersNum,
@@ -46,11 +46,39 @@ namespace Battleships.Tests
             Assert.Equal(upFieldsCount, board.UpFields);
         }
 
-        public static IEnumerable<object[]> BoardAndShipsTestData =>
+        public static IEnumerable<object[]> BoardAndShips_Valid_TestData =>
         new List<object[]>
         {
             new object[] { 10, 10,  // even size
                 5, 4, 3, 3, 2 },
+            new object[] { 9, 9,    // odd size
+                5, 4, 3, 3, 2 },
+            new object[] { 25, 5,   // very high
+                5, 4, 3, 3, 2 },
+            new object[] { 5, 24,   // very wide
+                5, 4, 3, 3, 2 },
+            new object[]{ 12, 12,  // only destroyers
+                0, 0, 0, 0, 18},
+            new object[]{ 20, 1,   // only carriers + full board
+                20, 0, 0, 0, 0},
+            new object[]{ 3, 3,    // small board
+                1, 1, 1, 0, 0},
+            new object[]{ 9, 9,    // empty
+                0, 0, 0, 0, 0}
+        };
+
+
+        [Fact]
+        public void Init_WhenShipsAreaExceedBoardArea_ShouldThrow()
+        {
+
+        }
+
+        public static IEnumerable<object[]> BoardAndShips_ExceedArea_TestData =>
+       new List<object[]>
+       {
+            new object[] { 10, 10,  // even size
+                5, 5, 3, 3, 2 },
             new object[] { 9, 9,    // odd size
                 5, 4, 3, 3, 2 },
             new object[] { 25, 5,   // very high
@@ -65,14 +93,7 @@ namespace Battleships.Tests
                 1, 1, 1, 0, 0},
             new object[]{ 9, 9,    // empty
                 0, 0, 0, 0, 0}
-        };
-
-
-        [Fact]
-        public void Init_WhenShipsSizeExceedBoardArea_ShouldThrow()
-        {
-
-        }
+       };
 
         [Fact]
         public void Init_WhenShipSizeExceedsDimensionOfBoard_ShouldThrow()
