@@ -12,14 +12,14 @@ ioManager.WriteLine("----------------------------");
 var settingsManager = new SettingsManager(ioManager);
 
 bool failedToInit = false;
-Board boardA;
-Board boardB;
+Board board1;
+Board board2;
 do
 {
     var gameSettings = settingsManager.Initalize();
 
-    boardA = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
-    boardB = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
+    board1 = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
+    board2 = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
 
     var ships = ShipsGenerator.Generate(gameSettings);
 
@@ -29,8 +29,8 @@ do
     {
         try
         {
-            boardA.Init(ships);
-            boardB.Init(ships);
+            board1.Init(ships);
+            board2.Init(ships);
         }
         catch (Exception ex)
         {
@@ -43,8 +43,38 @@ do
 } while (failedToInit);
 
 ioManager.WriteLine("The boards are:");
-ioManager.WriteBoard(boardA);
-ioManager.WriteLine();
-ioManager.WriteBoard(boardB);
+ioManager.WriteBoard(board1);
+ioManager.WriteBoard(board2);
+
+var judge = new Judge(board1, board2);
+var player1 = new Player(board1);
+var player2 = new Player(board2);
+var game = new Game(ioManager, judge, player1, player2);
+
+var shouldStartGame = ioManager.GetBooleanInput("Do you want to start the game?");
+if (shouldStartGame)
+{
+    Player? winner;
+    do
+    {
+        game.MakeATurn();
+        ioManager.WriteBoard(board1);
+        ioManager.WriteBoard(board2);
+    } while (!game.IsGameFinished(out winner));
+
+    if (winner == null)
+    {
+        ioManager.WriteLine("It's a draw!");
+    }
+    else if (winner == player1)
+    {
+        ioManager.WriteLine("Player1 won!!!");
+    }
+    else if (winner == player2)
+    {
+        ioManager.WriteLine("Player2 won!!!");
+    }
+}
+
 
 ioManager.ReadLine();

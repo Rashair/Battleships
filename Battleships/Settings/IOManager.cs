@@ -81,6 +81,7 @@ namespace Battleships.Settings
                 WriteLine();
             }
             WriteRow(2 * board.Width, "-");
+            WriteLine();
         }
 
         private void WriteRow(int width, string character)

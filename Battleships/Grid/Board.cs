@@ -15,20 +15,8 @@ namespace Battleships.Grid
         public int Width => board[0].Length;
         public int Height => board.Length;
         public int BoardArea => Height * Width;
-        public int UpFields { get; set; }
-
-        public Field this[int y, int x]
-        {
-            get
-            {
-                if (y >= Height)
-                    throw new ArgumentException("Y can't be greater than height", nameof(y));
-                if (x >= Width)
-                    throw new ArgumentException("X can't be greater than width", nameof(x));
-
-                return board[y][x];
-            }
-        }
+        public int UpFields { get; private set; }
+        public Guid PlayerToken { get; private set; }
 
         public Board(int height, int width, Random? random = null)
         {
@@ -45,6 +33,22 @@ namespace Battleships.Grid
             }
         }
 
+        public Field this[int y, int x]
+        {
+            get
+            {
+                ValidateCoordinates(y, x);
+                return board[y][x];
+            }
+        }
+
+        private void ValidateCoordinates(int y, int x)
+        {
+            if (y >= Height)
+                throw new ArgumentException("Y can't be greater than height", nameof(y));
+            if (x >= Width)
+                throw new ArgumentException("X can't be greater than width", nameof(x));
+        }
 
         public void Init(IEnumerable<Ship> ships)
         {
@@ -83,9 +87,9 @@ namespace Battleships.Grid
                 yield return $"Sum of ships size: {shipsAreaSum} cannot exceed board area: {BoardArea}.";
         }
 
-        private Position GetRandomValidPositionForShip(int size)
+        private ShipPosition GetRandomValidPositionForShip(int size)
         {
-            Position pos;
+            ShipPosition pos;
             int attempt = 0;
             var allowedDirections = GetDirectionsAllowedForShip(size).ToList();
             do
@@ -98,7 +102,7 @@ namespace Battleships.Grid
                 int yStart = random.Next(maxHeight);
                 int xStart = random.Next(maxWidth);
 
-                pos = new Position
+                pos = new ShipPosition
                 {
                     YStart = yStart,
                     XStart = xStart,
@@ -125,7 +129,7 @@ namespace Battleships.Grid
                 yield return Direction.Right;
         }
 
-        private bool IsPositionValid(Position pos, int shipSize)
+        private bool IsPositionValid(ShipPosition pos, int shipSize)
         {
             int yCoefficient = pos.Dir.GetYCoefficient();
             int xCoefficient = pos.Dir.GetXCoefficient();
@@ -139,7 +143,7 @@ namespace Battleships.Grid
             return true;
         }
 
-        private void Put(Ship ship, Position pos)
+        private void Put(Ship ship, ShipPosition pos)
         {
             int yCoefficient = pos.Dir.GetYCoefficient();
             int xCoefficient = pos.Dir.GetXCoefficient();
@@ -149,6 +153,36 @@ namespace Battleships.Grid
                 board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = Field.ShipUp;
                 ++UpFields;
             }
+        }
+
+        public bool Shoot(int y, int x)
+        {
+            ValidateCoordinates(y, x);
+
+            switch (board[y][x])
+            {
+                case Field.ShipUp:
+                    board[y][x] = Field.ShipDown;
+                    --UpFields;
+                    return true;
+
+                case Field.ShipDown:
+                    throw new InvalidOperationException("Cannot sunk ship again.");
+
+                case Field.Empty:
+                    return false;
+
+                default:
+                    throw new InvalidOperationException("Unhandled Field case.");
+            }
+        }
+
+        public void InitPlayerToken(Player player)
+        {
+            if (player.Token == Guid.Empty)
+                throw new InvalidOperationException("Empty player token.");
+
+            this.PlayerToken = player.Token;
         }
     }
 }
