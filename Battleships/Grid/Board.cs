@@ -30,7 +30,7 @@ namespace Battleships.Grid
             }
         }
 
-        public Board(int width, int height, Random random = null)
+        public Board(int width, int height, Random? random = null)
         {
             this.random = random ?? new();
 
