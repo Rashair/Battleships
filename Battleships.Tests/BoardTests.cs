@@ -111,12 +111,14 @@ namespace Battleships.Tests
 
             // Act && Assert
             var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));
-            Assert.Contains("exceed", ex.Message, StringComparison.InvariantCultureIgnoreCase);
+            Assert.Matches("exceed.*?area", ex.Message);
         }
 
         public static IEnumerable<object[]> BoardAndShips_ExceedArea_TestData =>
             new List<object[]>
             {
+               new object[] { 1, 1,   // 1 x 1
+                    0, 1, 0, 0, 0 },
                 new object[] { 4, 4,   // even size
                     5, 4, 3, 3, 2 },
                 new object[] { 3, 3,   // odd size
@@ -133,13 +135,36 @@ namespace Battleships.Tests
                     6, 1, 1, 0, 0},
             };
 
-        [Fact]
-        public void Init_WhenShipSizeExceedsDimensionOfBoard_ShouldThrow()
+        [Theory(Timeout = DefaultTimeoutMs)]
+        [MemberData(nameof(BoardAndShips_ShipSizeExceedsDimensions_TestData))]
+        public void Init_WhenShipSizeExceedsDimensionOfBoard_ShouldThrow(
+            int boardHeight, int boardWidth,
+            int carriersNum,
+            int battleshipsNum,
+            int cruisersNum,
+            int submarinesNum,
+            int destroyersNum)
         {
+            var board = new Board(boardHeight, boardWidth, random);
+            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
 
+            // Act && Assert
+            var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));
+            Assert.Matches("exceed.*?dimension", ex.Message);
         }
 
-        private List<Ship> GenerateShips(
+        public static IEnumerable<object[]> BoardAndShips_ShipSizeExceedsDimensions_TestData =>
+           new List<object[]>
+           {
+                new object[] { 3, 3,   // area fits, but not dimensions
+                    0, 0, 0, 1, 0 },
+                new object[] { 2, 3,   // one fits, second not
+                    0, 1, 0, 1, 0 },
+                new object[] { 4, 4,   // only biggest does not fit
+                    1, 1, 1, 1, 1 },
+           };
+
+        private static List<Ship> GenerateShips(
            int carriersNum = 5,
            int battleshipsNum = 4,
            int cruisersNum = 3,
