@@ -1,5 +1,4 @@
 using Battleships.Grid;
-using System;
 
 public static class DirectionExtensions
 {

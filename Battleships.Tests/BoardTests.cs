@@ -24,7 +24,7 @@ namespace Battleships.Tests
             int destroyersNum)
         {
             // Arrange
-            var board = new Board(boardHeight, boardWidth, random);
+            var board = new Board(boardWidth, boardHeight, random);
             var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
 
             // Act
@@ -80,7 +80,7 @@ namespace Battleships.Tests
             int destroyersNum)
         {
             // Arrange
-            var board = new Board(boardHeight, boardWidth, random);
+            var board = new Board(boardWidth, boardHeight, random);
             var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
 
             // Act && Assert
@@ -106,7 +106,7 @@ namespace Battleships.Tests
             int destroyersNum)
         {
             // Arrange
-            var board = new Board(boardHeight, boardWidth, random);
+            var board = new Board(boardWidth, boardHeight, random);
             var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
 
             // Act && Assert
@@ -145,8 +145,9 @@ namespace Battleships.Tests
             int submarinesNum,
             int destroyersNum)
         {
-            var board = new Board(boardHeight, boardWidth, random);
-            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
+            var board = new Board(boardWidth, boardHeight, random);
+            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum,
+                submarinesNum, destroyersNum);
 
             // Act && Assert
             var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));

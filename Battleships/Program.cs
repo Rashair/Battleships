@@ -1,82 +1,49 @@
 ﻿using Battleships;
-using static System.Console;
-
-WriteLine("Welcome in Battleships Game!");
-WriteLine("----------------------------");
-
-var gameSettings = new GameSettings();
-WriteLine("The default settings are:");
-const int padRight = 8;
-WriteLine($@"Board size: {gameSettings.BoardHeight}x{gameSettings.BoardHeight}
-
-| Class of ship   | Size | No. of ships |
-| --------------- | ---- | ------------ |
-| Carrier         |  5   |      {gameSettings.CarriersNum}{"|",padRight}
-| Battleship      |  4   |      {gameSettings.BattleshipsNum}{"|",padRight}
-| Cruiser         |  3   |      {gameSettings.CruisersNum}{"|",padRight}
-| Submarine       |  3   |      {gameSettings.SubmarinesNum}{"|",padRight}
-| Destroyer       |  2   |      {gameSettings.DestroyersNum}{"|",padRight}
-");
+using Battleships.Grid;
+using Battleships.Settings;
+using System;
 
 
-gameSettings = HandleSettingsModification(gameSettings);
+var ioManager = new IOManager();
 
+ioManager.WriteLine("Welcome in Battleships Game!");
+ioManager.WriteLine("----------------------------");
 
-GameSettings HandleSettingsModification(GameSettings gameSettings)
+var settingsManager = new SettingsManager(ioManager);
+
+bool failedToInit = false;
+Board boardA;
+Board boardB;
+do
 {
-    Write("Do you want to modify default settings? (y/n): ");
-    var wantsToModifyDefaultSettings = ReadLine() == "y";
-    if (!wantsToModifyDefaultSettings)
-        return gameSettings;
+    var gameSettings = settingsManager.Initalize();
 
-    Write("Provide board height: ");
-    int? input = ReadNumericInput();
-    if (input.HasValue)
-        gameSettings = gameSettings with { BoardHeight = input.Value };
+    boardA = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
+    boardB = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
 
-    Write("Provide board width: ");
-    input = ReadNumericInput();
-    if (input.HasValue)
-        gameSettings = gameSettings with { BoardWidth = input.Value };
+    var ships = ShipsGenerator.Generate(gameSettings);
 
-    Write("Do you want to modify number of ships of each type? (y/n): ");
-    var stillWantsToModifyDefaultSettings = ReadLine() == "y";
-    if (!stillWantsToModifyDefaultSettings)
-        return gameSettings;
+    bool shouldRetry = false;
 
-    Write("Provide carriers no.: ");
-    input = ReadNumericInput();
-    if (input.HasValue)
-        gameSettings = gameSettings with { CarriersNum = input.Value };
+    do
+    {
+        try
+        {
+            boardA.Init(ships);
+            boardB.Init(ships);
+        }
+        catch (Exception ex)
+        {
+            failedToInit = true;
+            ioManager.WriteLine($"Failed to initialize ships: {Environment.NewLine}"
+                + ex);
+            shouldRetry = ioManager.GetBooleanInput("Do you want to retry init?");
+        }
+    } while (shouldRetry);
+} while (failedToInit);
 
-    Write("Provide battleships no.: ");
-    input = ReadNumericInput();
-    if (input.HasValue)
-        gameSettings = gameSettings with { BattleshipsNum = input.Value };
+ioManager.WriteLine("The boards are:");
+ioManager.WriteBoard(boardA);
+ioManager.WriteBoard(boardB);
 
-    Write("Provide cruisers no.: ");
-    input = ReadNumericInput();
-    if (input.HasValue)
-        gameSettings = gameSettings with { CruisersNum = input.Value };
-
-    Write("Provide submarines no.: ");
-    input = ReadNumericInput();
-    if (input.HasValue)
-        gameSettings = gameSettings with { SubmarinesNum = input.Value };
-
-    Write("Provide destroyers no.: ");
-    input = ReadNumericInput();
-    if (input.HasValue)
-        gameSettings = gameSettings with { DestroyersNum = input.Value }; ;
-
-    return gameSettings;
-}
-
-int? ReadNumericInput()
-{
-    var input = ReadLine()!.Trim();
-    return int.TryParse(input, out int result) ? result : null;
-}
-
-
-Read();
+ioManager.ReadLine();

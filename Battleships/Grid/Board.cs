@@ -30,14 +30,13 @@ namespace Battleships.Grid
             }
         }
 
-        public Board(int width, int height, Random? random = null)
+        public Board(int height, int width, Random? random = null)
         {
             this.random = random ?? new();
-
-            if (width <= 0)
-                throw new ArgumentException("Argument cannot be less or equal to 0", nameof(width));
             if (height <= 0)
                 throw new ArgumentException("Argument cannot be less or equal to 0", nameof(height));
+            if (width <= 0)
+                throw new ArgumentException("Argument cannot be less or equal to 0", nameof(width));
 
             board = new Field[height][];
             for (int i = 0; i < height; ++i)
