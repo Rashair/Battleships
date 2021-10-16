@@ -7,7 +7,7 @@ namespace Battleships.Grid
 {
     public class Board
     {
-        public const int MaxPositioningAttempts = 50;
+        public const int MaxPositioningAttempts = 1000;
 
         private readonly Random random;
         private readonly Field[][] board;
@@ -68,20 +68,22 @@ namespace Battleships.Grid
 
         private IEnumerable<string> BrokenRules(IEnumerable<Ship> ships)
         {
+            if (ships.Sum(x => x.Size) > Width * Height)
+                yield return "Sum of ships size cannot exceed board area";
+
             yield break;
         }
 
-        /// <summary>
-        /// Returns valid position 
-        /// </summary>
         private Position GetRandomValidPositionForShip(int size)
         {
             Position pos;
             int attempt = 0;
+            var allowedDirections = GetDirectionsAllowedForShip(size).ToList();
             do
             {
                 ++attempt;
-                Direction dir = DirectionExtensions.FromInt(random.Next(2));
+                var dir = allowedDirections[random.Next(allowedDirections.Count)];
+
                 int maxHeight = Height - size * dir.GetYCoefficient();
                 int maxWidth = Width - size * dir.GetXCoefficient();
                 int yStart = random.Next(maxHeight);
@@ -99,6 +101,19 @@ namespace Battleships.Grid
                 throw new TimeoutException("Unable to place the ship correctly");
 
             return pos;
+        }
+
+        /// <summary>
+        /// Return directions allowed for ship based on its size 
+        ///  and dimensions of the board.
+        /// </summary>
+        private IEnumerable<Direction> GetDirectionsAllowedForShip(int shipSize)
+        {
+            if (shipSize <= Height)
+                yield return Direction.Down;
+
+            if (shipSize <= Width)
+                yield return Direction.Right;
         }
 
         private bool IsPositionValid(Position pos, int shipSize)
