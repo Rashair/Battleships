@@ -48,8 +48,6 @@ namespace Battleships.Tests
             Assert.Equal(upFieldsCount, board.UpFields);
         }
 
-
-
         public static IEnumerable<object[]> BoardAndShips_Valid_TestData =>
         new List<object[]>
         {
@@ -68,7 +66,31 @@ namespace Battleships.Tests
             new object[]{ 3, 3,    // small board
                 1, 1, 1, 0, 0},
             new object[]{ 9, 9,    // empty
-                0, 0, 0, 0, 0},
+                0, 0, 0, 0, 0}
+        };
+
+        [Theory(Timeout = DefaultTimeoutMs)]
+        [MemberData(nameof(BoardAndShips_Timeout_TestData))]
+        public void Init_WhenItIsNotPossibleToGenerateValidPositions_ShouldThrowTimeoutException(
+            int boardHeight, int boardWidth,
+            int carriersNum,
+            int battleshipsNum,
+            int cruisersNum,
+            int submarinesNum,
+            int destroyersNum)
+        {
+            // Arrange
+            var board = new Board(boardHeight, boardWidth, random);
+            var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
+
+            // Act && Assert
+            var ex = Assert.Throws<TimeoutException>(() => board.Init(ships));
+            Assert.Contains("unable to place", ex.Message, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static IEnumerable<object[]> BoardAndShips_Timeout_TestData =>
+        new List<object[]>
+        {
             new object[] { 2, 24,  // regression - generates ship outside of board
                     5, 4, 3, 3, 2 },
         };
@@ -88,26 +110,27 @@ namespace Battleships.Tests
             var ships = GenerateShips(carriersNum, battleshipsNum, cruisersNum, submarinesNum, destroyersNum);
 
             // Act && Assert
-            Assert.Throws<ArgumentException>(() => board.Init(ships));
+            var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));
+            Assert.Contains("exceed", ex.Message, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static IEnumerable<object[]> BoardAndShips_ExceedArea_TestData =>
             new List<object[]>
             {
-                new object[] { 4, 4,  // even size
+                new object[] { 4, 4,   // even size
                     5, 4, 3, 3, 2 },
-                new object[] { 3, 3,    // odd size
+                new object[] { 3, 3,   // odd size
                     5, 4, 3, 3, 2 },
-                new object[] { 25, 2,   // very high
-                    5, 4, 3, 3, 2 },
-                new object[] { 2, 24,   // very wide
-                    5, 4, 3, 3, 2 },
+                new object[] { 25, 2,  // very high
+                    6, 4, 4, 4, 2 },
+                new object[] { 2, 24,  // very wide
+                    5, 4, 3, 3, 3 },
                 new object[]{ 10, 10,  // only destroyers
                     0, 0, 0, 0, 21},
-                new object[]{ 20, 1,   // only carriers + full board
+                new object[]{ 20, 1,   // only carriers
                     21, 0, 0, 0, 0},
                 new object[]{ 3, 3,    // small board
-                    1, 1, 1, 0, 0},
+                    6, 1, 1, 0, 0},
             };
 
         [Fact]
