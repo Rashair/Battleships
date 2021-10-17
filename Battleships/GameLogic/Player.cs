@@ -2,7 +2,7 @@
 using Battleships.Settings;
 using System;
 
-namespace Battleships
+namespace Battleships.GameLogic
 {
     public class Player
     {
@@ -14,14 +14,14 @@ namespace Battleships
         public Guid Token { get; }
         public Board Board { get; }
 
-        public Player(IOManager ioManager, Board board, string name, Random? random = null)
+        public Player(IOManager _ioManager, Board board, string name, Random? random = null)
         {
-            this.ioManager = ioManager;
-            this.Board = board;
-            this.Name = name;
-            this.Token = Guid.NewGuid();
-              
-            board.InitPlayerToken(this);
+            this.ioManager = _ioManager;
+            Board = board;
+            Name = name;
+            Token = Guid.NewGuid();
+
+            board.InitPlayerToken(Token);
 
             this.random = random ?? new();
             this.shootingBoard = new bool[Board.Height][];

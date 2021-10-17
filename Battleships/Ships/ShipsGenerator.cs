@@ -1,8 +1,7 @@
 ﻿using Battleships.Settings;
-using Battleships.Ships;
 using System.Collections.Generic;
 
-namespace Battleships
+namespace Battleships.Ships
 {
     public static class ShipsGenerator
     {

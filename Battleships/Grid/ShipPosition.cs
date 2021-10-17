@@ -1,6 +1,6 @@
 ﻿namespace Battleships.Grid
 {
-    public record ShipPosition
+    internal record ShipPosition
     {
         public int YStart { get; init; }
         public int XStart { get; init; }

@@ -2,7 +2,7 @@
 using Battleships.Settings;
 using System;
 
-namespace Battleships
+namespace Battleships.GameLogic
 {
     public class Game
     {

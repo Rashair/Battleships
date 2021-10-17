@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Battleships.Grid;
 using Battleships.Settings;
+using Battleships.Ships;
 using Xunit;
 
 namespace Battleships.Tests

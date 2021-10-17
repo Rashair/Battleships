@@ -1,7 +1,7 @@
 ﻿using Battleships.Grid;
 using System;
 
-namespace Battleships
+namespace Battleships.GameLogic
 {
     public class Judge
     {

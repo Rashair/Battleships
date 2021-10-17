@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Battleships.GameLogic;
 using Battleships.Ships;
 
 namespace Battleships.Grid
@@ -177,12 +178,15 @@ namespace Battleships.Grid
             }
         }
 
-        public void InitPlayerToken(Player player)
+        public void InitPlayerToken(Guid playerToken)
         {
-            if (player.Token == Guid.Empty)
+            if (playerToken == Guid.Empty)
                 throw new InvalidOperationException("Empty player token.");
 
-            this.PlayerToken = player.Token;
+            if (this.PlayerToken != Guid.Empty)
+                throw new InvalidOperationException("Player token was already set.");
+
+            this.PlayerToken = playerToken;
         }
     }
 }

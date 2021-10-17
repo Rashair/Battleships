@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Battleships.Grid;
+using Battleships.Ships;
 
 namespace Battleships.Settings
 {

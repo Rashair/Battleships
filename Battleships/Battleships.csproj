@@ -13,8 +13,4 @@
     <None Remove="Common\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Game\" />
-  </ItemGroup>
-
 </Project>
