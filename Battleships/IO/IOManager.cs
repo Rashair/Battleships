@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Battleships.Grid;
-using Battleships.Grid.Helpers;
 
 namespace Battleships.Settings
 {
-    public class IOManager
+    public class IOManager : IIOManager
     {
         private readonly TextReader reader;
         private readonly TextWriter writer;

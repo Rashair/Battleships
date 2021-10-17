@@ -6,7 +6,7 @@ namespace Battleships.GameLogic
 {
     public class Player
     {
-        private readonly IOManager ioManager;
+        private readonly IIOManager ioManager;
         private readonly Random random;
         private readonly bool[][] shootingBoard;
 
@@ -14,7 +14,7 @@ namespace Battleships.GameLogic
         public Guid Token { get; }
         public Board Board { get; }
 
-        public Player(IOManager ioManager, Board board, string name, Random? random = null)
+        public Player(IIOManager ioManager, Board board, string name, Random? random = null)
         {
             this.ioManager = ioManager;
             Board = board;

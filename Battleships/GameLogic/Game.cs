@@ -4,12 +4,12 @@ namespace Battleships.GameLogic
 {
     public class Game
     {
-        private readonly IOManager ioManager;
+        private readonly IIOManager ioManager;
         private readonly Judge judge;
         private readonly Player player1;
         private readonly Player player2;
 
-        public Game(IOManager ioManager,
+        public Game(IIOManager ioManager,
             Judge judge,
             Player player1,
             Player player2)

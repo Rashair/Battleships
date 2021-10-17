@@ -6,15 +6,18 @@ namespace Battleships.Settings
 {
     public class SettingsManager
     {
-        private readonly IOManager ioManager;
+        private readonly IIOManager ioManager;
 
+        private readonly Random random;
         private GameSettings gameSettings;
 
-        public SettingsManager(IOManager ioManager,
-            GameSettings? gameSettings = null)
+        public SettingsManager(IIOManager ioManager,
+            GameSettings? gameSettings = null,
+            Random? random = null)
         {
             this.ioManager = ioManager;
             this.gameSettings = gameSettings ?? new();
+            this.random = random ?? new();
         }
 
         public (Board board1, Board board2) InitializeGame()
@@ -26,8 +29,8 @@ namespace Battleships.Settings
             {
                 var gameSettings = InitalizeGameSettings();
 
-                board1 = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
-                board2 = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
+                board1 = CreateBoard(gameSettings.BoardHeight, gameSettings.BoardWidth);
+                board2 = CreateBoard(gameSettings.BoardHeight, gameSettings.BoardWidth);
 
                 var ships = ShipsGenerator.Generate(gameSettings);
 
@@ -119,6 +122,11 @@ namespace Battleships.Settings
             };
 
             return gameSettings;
+        }
+
+        private Board CreateBoard(int height, int width)
+        {
+            return new Board(height, width, new Random(random.Next()));
         }
     }
 }
