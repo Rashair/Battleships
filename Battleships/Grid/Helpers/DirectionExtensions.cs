@@ -1,8 +1,8 @@
 using Battleships.Grid;
 
-public static class DirectionExtensions
+internal static class DirectionExtensions
 {
-    public static int GetXCoefficient(this Direction dir)
+    internal static int GetXCoefficient(this Direction dir)
     {
         return dir switch
         {
@@ -12,7 +12,7 @@ public static class DirectionExtensions
         };
     }
 
-    public static int GetYCoefficient(this Direction dir)
+    internal static int GetYCoefficient(this Direction dir)
     {
         return dir switch
         {

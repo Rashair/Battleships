@@ -172,7 +172,7 @@ namespace Battleships.Grid
 
             for (int i = 0; i < ship.Size; ++i)
             {
-                board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = Field.ShipUp;
+                board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] = Field.Ship;
                 ++UpFields;
             }
         }
@@ -183,16 +183,20 @@ namespace Battleships.Grid
 
             switch (board[y][x])
             {
-                case Field.ShipUp:
-                    board[y][x] = Field.ShipDown;
+                case Field.Ship:
+                    board[y][x] = Field.ShotShip;
                     --UpFields;
                     return true;
 
-                case Field.ShipDown:
-                    throw new InvalidOperationException("Cannot sunk ship again.");
+                case Field.ShotShip:
+                    throw new InvalidOperationException("Cannot shot ship again.");
 
                 case Field.Empty:
+                    board[y][x] = Field.ShotEmpty;
                     return false;
+
+                case Field.ShotEmpty:
+                    throw new InvalidOperationException("Cannot shot empty field again.");
 
                 default:
                     throw new InvalidOperationException("Unhandled Field case.");

@@ -7,8 +7,9 @@
             return field switch
             {
                 Field.Empty => " ",
-                Field.ShipUp => "O",
-                Field.ShipDown => "X",
+                Field.ShotEmpty => "-",
+                Field.Ship => "O",
+                Field.ShotShip => "X",
                 _ => "",
             };
         }

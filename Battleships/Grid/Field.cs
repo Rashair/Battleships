@@ -3,7 +3,8 @@
     public enum Field
     {
         Empty,
-        ShipUp,
-        ShipDown,
+        ShotEmpty,
+        Ship,
+        ShotShip,
     }
 }

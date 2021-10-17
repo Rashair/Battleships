@@ -34,7 +34,7 @@ namespace Battleships.Tests
             {
                 for (int j = 0; j < board.Width; ++j)
                 {
-                    if (board[i, j] == Field.ShipUp)
+                    if (board[i, j] == Field.Ship)
                     {
                         ++upFieldsCount;
                     }
