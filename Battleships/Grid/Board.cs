@@ -69,7 +69,7 @@ namespace Battleships.Grid
         /// <exception cref="System.TimeoutException">When board initialization fails <see cref="MaxPositioningAttempts"/> times</exception>
         public void Init(IEnumerable<Ship> ships)
         {
-            if(UpFields > 0)
+            if (UpFields > 0)
             {
                 throw new InvalidOperationException($"Board is already initialized.");
             }
