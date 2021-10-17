@@ -7,32 +7,32 @@ namespace Battleships.Settings
     public class SettingsManager
     {
         private readonly IIOManager ioManager;
-
         private readonly Random random;
-        private GameSettings gameSettings;
+
+        public GameSettings GameSettings { get; private set; }
 
         public SettingsManager(IIOManager ioManager,
             GameSettings? gameSettings = null,
             Random? random = null)
         {
             this.ioManager = ioManager;
-            this.gameSettings = gameSettings ?? new();
+            GameSettings = gameSettings ?? new();
             this.random = random ?? new();
         }
 
         public (Board board1, Board board2) InitializeGame()
         {
-            bool failedToInit = false;
             Board board1;
             Board board2;
+            bool failedToInit;
             do
             {
-                var gameSettings = InitalizeGameSettings();
+                GameSettings = InitalizeGameSettings();
 
-                board1 = CreateBoard(gameSettings.BoardHeight, gameSettings.BoardWidth);
-                board2 = CreateBoard(gameSettings.BoardHeight, gameSettings.BoardWidth);
+                board1 = CreateBoard(GameSettings.BoardHeight, GameSettings.BoardWidth);
+                board2 = CreateBoard(GameSettings.BoardHeight, GameSettings.BoardWidth);
 
-                var ships = ShipsGenerator.Generate(gameSettings);
+                var ships = ShipsGenerator.Generate(GameSettings);
 
                 bool shouldRetry = false;
                 do
@@ -41,13 +41,20 @@ namespace Battleships.Settings
                     {
                         board1.Init(ships);
                         board2.Init(ships);
+                        failedToInit = false;
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        failedToInit = true;
+                        ioManager.WriteLine($"Failed to initialize ships: " + ex.Message);
+                        shouldRetry = ioManager.GetBooleanInput("Do you want to retry init?");
                     }
                     catch (Exception ex)
                     {
                         failedToInit = true;
-                        ioManager.WriteLine($"Failed to initialize ships: {Environment.NewLine}"
-                            + ex);
-                        shouldRetry = ioManager.GetBooleanInput("Do you want to retry init?");
+                        shouldRetry = false;
+                        ioManager.WriteLine($"Unexpected error when trying to initialize ships: {Environment.NewLine}"
+                           + ex);
                     }
                 } while (shouldRetry);
             } while (failedToInit);
@@ -58,7 +65,7 @@ namespace Battleships.Settings
         public GameSettings InitalizeGameSettings()
         {
             ioManager.WriteLine("The default settings are:");
-            ioManager.WriteLine(gameSettings.ToString());
+            ioManager.WriteLine(GameSettings.ToString());
 
             return HandleSettingsModification();
         }
@@ -69,59 +76,59 @@ namespace Battleships.Settings
                 .GetBooleanInput("Do you want to modify default settings?");
             if (!wantsToModifyDefaultSettings)
             {
-                return gameSettings;
+                return GameSettings;
             }
 
             int? input = ioManager.GetIntegerInput("Provide board height");
             if (input.HasValue)
             {
-                gameSettings = gameSettings with { BoardHeight = input.Value };
+                GameSettings = GameSettings with { BoardHeight = input.Value };
             }
 
             input = ioManager.GetIntegerInput("Provide board width");
             if (input.HasValue)
             {
-                gameSettings = gameSettings with { BoardWidth = input.Value };
+                GameSettings = GameSettings with { BoardWidth = input.Value };
             }
 
             var stillWantsToModifyDefaultSettings = ioManager
                 .GetBooleanInput("Do you want to modify number of ships of each type?");
             if (!stillWantsToModifyDefaultSettings)
             {
-                return gameSettings;
+                return GameSettings;
             }
 
             input = ioManager.GetIntegerInput("Provide carriers no.");
             if (input.HasValue)
             {
-                gameSettings = gameSettings with { CarriersNum = input.Value };
+                GameSettings = GameSettings with { CarriersNum = input.Value };
             }
 
             input = ioManager.GetIntegerInput("Provide battleships no.");
             if (input.HasValue)
             {
-                gameSettings = gameSettings with { BattleshipsNum = input.Value };
+                GameSettings = GameSettings with { BattleshipsNum = input.Value };
             }
 
             input = ioManager.GetIntegerInput("Provide cruisers no.");
             if (input.HasValue)
             {
-                gameSettings = gameSettings with { CruisersNum = input.Value };
+                GameSettings = GameSettings with { CruisersNum = input.Value };
             }
 
             input = ioManager.GetIntegerInput("Provide submarines no.");
             if (input.HasValue)
             {
-                gameSettings = gameSettings with { SubmarinesNum = input.Value };
+                GameSettings = GameSettings with { SubmarinesNum = input.Value };
             }
 
             input = ioManager.GetIntegerInput("Provide destroyers no.");
             if (input.HasValue)
             {
-                gameSettings = gameSettings with { DestroyersNum = input.Value };
+                GameSettings = GameSettings with { DestroyersNum = input.Value };
             };
 
-            return gameSettings;
+            return GameSettings;
         }
 
         private Board CreateBoard(int height, int width)
