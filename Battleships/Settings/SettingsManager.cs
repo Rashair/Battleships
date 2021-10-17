@@ -27,7 +27,7 @@ namespace Battleships.Settings
             bool failedToInit;
             do
             {
-                GameSettings = InitalizeGameSettings();
+                InitalizeGameSettings();
 
                 board1 = CreateBoard(GameSettings.BoardHeight, GameSettings.BoardWidth);
                 board2 = CreateBoard(GameSettings.BoardHeight, GameSettings.BoardWidth);
@@ -62,21 +62,23 @@ namespace Battleships.Settings
             return (board1, board2);
         }
 
-        public GameSettings InitalizeGameSettings()
+        public void InitalizeGameSettings()
         {
             ioManager.WriteLine("The default settings are:");
             ioManager.WriteLine(GameSettings.ToString());
 
-            return HandleSettingsModification();
+            HandleSettingsModification();
+            ioManager.WriteLine("The updated settings are:");
+            ioManager.WriteLine(GameSettings.ToString());
         }
 
-        private GameSettings HandleSettingsModification()
+        private void HandleSettingsModification()
         {
             var wantsToModifyDefaultSettings = ioManager
                 .GetBooleanInput("Do you want to modify default settings?");
             if (!wantsToModifyDefaultSettings)
             {
-                return GameSettings;
+                return;
             }
 
             int? input = ioManager.GetIntegerInput("Provide board height");
@@ -95,7 +97,7 @@ namespace Battleships.Settings
                 .GetBooleanInput("Do you want to modify number of ships of each type?");
             if (!stillWantsToModifyDefaultSettings)
             {
-                return GameSettings;
+                return;
             }
 
             input = ioManager.GetIntegerInput("Provide carriers no.");
@@ -127,8 +129,7 @@ namespace Battleships.Settings
             {
                 GameSettings = GameSettings with { DestroyersNum = input.Value };
             };
-
-            return GameSettings;
+            ioManager.WriteLine();
         }
 
         private Board CreateBoard(int height, int width)
