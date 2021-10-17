@@ -1,26 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Battleships.GameLogic;
 using Battleships.Grid;
 using Battleships.Grid.Helpers;
 using Battleships.Settings;
+using Battleships.Tests;
 using Moq;
 using Xunit;
 
-namespace Battleships.Tests
+namespace Battleships.GameLogic.Tests
 {
     public class JudgeTests : TestsBase
     {
-        private static Random Random => new(123);
-
-        public JudgeTests()
-        {
-
-        }
-
+        private static Random RandomInstance => new(123);
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(Shoot_TestData))]
@@ -110,7 +101,7 @@ namespace Battleships.Tests
                x.GetBooleanInput(It.IsAny<string>()))
                .Returns(true);
 
-            var settingsManager = new SettingsManager(ioManager.Object, gameSettings, Random);
+            var settingsManager = new SettingsManager(ioManager.Object, gameSettings, RandomInstance);
             return settingsManager.InitializeGame();
         }
     }

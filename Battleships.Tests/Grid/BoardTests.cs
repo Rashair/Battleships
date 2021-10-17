@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Battleships.Grid;
 using Battleships.Settings;
 using Battleships.Ships;
+using Battleships.Tests;
 using Xunit;
 
-namespace Battleships.Tests
+namespace Battleships.Grid.Tests
 {
     public class BoardTests : TestsBase
     {
