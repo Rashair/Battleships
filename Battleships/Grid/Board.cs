@@ -53,17 +53,27 @@ namespace Battleships.Grid
         {
             if (y >= Height)
             {
-                throw new ArgumentException("Y can't be greater than height", nameof(y));
+                throw new ArgumentException("Y coordinate can't be greater than height", nameof(y));
             }
 
             if (x >= Width)
             {
-                throw new ArgumentException("X can't be greater than width", nameof(x));
+                throw new ArgumentException("X coordinate can't be greater than width", nameof(x));
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ships"></param>
+        /// <exception cref="System.TimeoutException">When board initialization fails <see cref="MaxPositioningAttempts"/> times</exception>
         public void Init(IEnumerable<Ship> ships)
         {
+            if(UpFields > 0)
+            {
+                throw new InvalidOperationException($"Board is already initialized.");
+            }
+
             var areShipsValid = AreShipsValidForInit(ships, out var errors);
             if (!areShipsValid)
             {
@@ -205,7 +215,7 @@ namespace Battleships.Grid
             }
         }
 
-        public void InitPlayerToken(Guid playerToken)
+        internal void InitPlayerToken(Guid playerToken)
         {
             if (playerToken == Guid.Empty)
             {

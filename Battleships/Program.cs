@@ -1,7 +1,9 @@
-﻿using Battleships.GameLogic;
+﻿using System.Runtime.CompilerServices;
+using Battleships.GameLogic;
 using Battleships.Grid;
 using Battleships.Settings;
 
+[assembly: InternalsVisibleTo("Battleships.Tests")]
 
 var ioManager = new IOManager();
 ioManager.WriteLine("Welcome in Battleships Game!");

@@ -13,5 +13,10 @@
                 _ => "",
             };
         }
+
+        public static bool WasShot(this Field field)
+        {
+            return field == Field.ShotEmpty || field == Field.ShotShip;
+        }
     }
 }
