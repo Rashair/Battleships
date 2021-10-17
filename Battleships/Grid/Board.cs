@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Battleships.Grid.Helpers;
 using Battleships.Ships;
 
 namespace Battleships.Grid
@@ -216,6 +218,29 @@ namespace Battleships.Grid
             }
 
             PlayerToken = playerToken;
+        }
+
+        public override string? ToString()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append('-', 2 * Width);
+            stringBuilder.AppendLine();
+
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    stringBuilder.Append(board[y][x].ToFormattedString());
+                    stringBuilder.Append('|');
+                }
+                stringBuilder.AppendLine();
+            }
+
+            stringBuilder.Append('-', 2 * Width);
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine();
+
+            return stringBuilder.ToString();
         }
     }
 }

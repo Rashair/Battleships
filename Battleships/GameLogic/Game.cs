@@ -53,7 +53,7 @@ namespace Battleships.GameLogic
             return winner;
         }
 
-        public void MakeATurn()
+        private void MakeATurn()
         {
             player1.ShootField(judge);
             player2.ShootField(judge);

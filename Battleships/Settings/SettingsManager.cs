@@ -54,7 +54,8 @@ namespace Battleships.Settings
 
         public GameSettings InitalizeGameSettings()
         {
-            ioManager.WriteSettings(gameSettings);
+            ioManager.WriteLine("The default settings are:");
+            ioManager.WriteLine(gameSettings.ToString());
 
             return HandleSettingsModification();
         }

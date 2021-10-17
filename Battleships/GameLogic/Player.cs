@@ -79,7 +79,7 @@ namespace Battleships.GameLogic
         public void DisplayState()
         {
             ioManager.WriteLine($"{Name}: ");
-            ioManager.WriteBoard(Board);
+            ioManager.WriteLine(Board.ToString()!);
         }
     }
 }
