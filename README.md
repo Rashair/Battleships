@@ -2,9 +2,9 @@
 Simple simulation of Battleships game ([Wiki](https://en.wikipedia.org/wiki/Battleship_(game)))
 
 ## Assumptions
-1. Default game settings:
-Board size: 12x12
-
+1. Default game settings:  
+Board size: 12x12  
+  
 | Class of ship   | Size | No. of ships |
 | --------------- | ---- | ------------ |
 | Carrier         |  5   |      1       |
@@ -12,8 +12,8 @@ Board size: 12x12
 | Cruiser         |  3   |      3       |
 | Submarine       |  3   |      3       |
 | Destroyer       |  2   |      4       |
-
-1. User may modify the default settings as long as it is possible to generate valid board provided parameters.
+  
+2. User may modify the default settings as long as it is possible to generate valid board provided parameters.
 
 1. Placement of the ships is generated randomly, but can fail (it's non-deterministic).
 In such case the user can retry generation with different Game parameters.
