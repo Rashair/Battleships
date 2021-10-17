@@ -22,11 +22,29 @@ namespace Battleships
             this.player2 = player2;
         }
 
+        public void Start()
+        {
+            var shouldStartGame = ioManager.GetBooleanInput("Do you want to start the game?");
+            if (shouldStartGame)
+            {
+                var winner = Run();
+
+                if (winner == null)
+                {
+                    ioManager.WriteLine("It's a draw!");
+                }
+                else
+                {
+                    ioManager.WriteLine($"{winner.Name} won!!!");
+                }
+            }
+        }
+
         /// <summary>
-        /// 
+        /// Main loop of the game, runs until game is finished.
         /// </summary>
         /// <returns>Winner of the game</returns>
-        public Player? Run()
+        private Player? Run()
         {
             Player? winner;
             while (!IsGameFinished(out winner))

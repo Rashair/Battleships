@@ -74,6 +74,7 @@ namespace Battleships
 
         public void DisplayState()
         {
+            ioManager.WriteLine($"{Name}: ");
             ioManager.WriteBoard(Board);
         }
     }

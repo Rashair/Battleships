@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Battleships.Grid;
 
 namespace Battleships.Settings
 {
@@ -8,15 +10,49 @@ namespace Battleships.Settings
 
         private GameSettings gameSettings;
 
-        public SettingsManager(IOManager? ioManager = null,
+        public SettingsManager(IOManager ioManager,
             GameSettings? gameSettings = null)
         {
-            this.ioManager = ioManager ?? new IOManager();
-
+            this.ioManager = ioManager;
             this.gameSettings = gameSettings ?? new();
         }
 
-        public GameSettings Initalize()
+        public (Board board1, Board board2) InitializeGame()
+        {
+            bool failedToInit = false;
+            Board board1;
+            Board board2;
+            do
+            {
+                var gameSettings = InitalizeGameSettings();
+
+                board1 = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
+                board2 = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth);
+
+                var ships = ShipsGenerator.Generate(gameSettings);
+
+                bool shouldRetry = false;
+                do
+                {
+                    try
+                    {
+                        board1.Init(ships);
+                        board2.Init(ships);
+                    }
+                    catch (Exception ex)
+                    {
+                        failedToInit = true;
+                        ioManager.WriteLine($"Failed to initialize ships: {Environment.NewLine}"
+                            + ex);
+                        shouldRetry = ioManager.GetBooleanInput("Do you want to retry init?");
+                    }
+                } while (shouldRetry);
+            } while (failedToInit);
+
+            return (board1, board2);
+        }
+
+        public GameSettings InitalizeGameSettings()
         {
             ioManager.WriteSettings(gameSettings);
 
