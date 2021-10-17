@@ -53,12 +53,12 @@ namespace Battleships.Grid
         {
             if (y >= Height)
             {
-                throw new ArgumentException("Y coordinate can't be greater than height", nameof(y));
+                throw new ArgumentException("Y coordinate cannot be greater than height", nameof(y));
             }
 
             if (x >= Width)
             {
-                throw new ArgumentException("X coordinate can't be greater than width", nameof(x));
+                throw new ArgumentException("X coordinate cannot be greater than width", nameof(x));
             }
         }
 

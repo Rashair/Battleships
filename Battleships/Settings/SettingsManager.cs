@@ -47,7 +47,7 @@ namespace Battleships.Settings
                     {
                         failedToInit = true;
                         ioManager.WriteLine($"Failed to initialize ships: " + ex.Message);
-                        shouldRetry = ioManager.GetBooleanInput("Do you want to retry init?");
+                        shouldRetry = ioManager.GetBooleanInput("Do you want to retry initialization?");
                     }
                     catch (Exception ex)
                     {
