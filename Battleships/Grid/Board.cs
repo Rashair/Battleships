@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Battleships.GameLogic;
 using Battleships.Ships;
 
 namespace Battleships.Grid
@@ -23,9 +22,14 @@ namespace Battleships.Grid
         {
             this.random = random ?? new();
             if (height <= 0)
+            {
                 throw new ArgumentException("Argument cannot be less or equal to 0", nameof(height));
+            }
+
             if (width <= 0)
+            {
                 throw new ArgumentException("Argument cannot be less or equal to 0", nameof(width));
+            }
 
             board = new Field[height][];
             for (int i = 0; i < height; ++i)
@@ -46,18 +50,25 @@ namespace Battleships.Grid
         private void ValidateCoordinates(int y, int x)
         {
             if (y >= Height)
+            {
                 throw new ArgumentException("Y can't be greater than height", nameof(y));
+            }
+
             if (x >= Width)
+            {
                 throw new ArgumentException("X can't be greater than width", nameof(x));
+            }
         }
 
         public void Init(IEnumerable<Ship> ships)
         {
             var areShipsValid = AreShipsValidForInit(ships, out var errors);
             if (!areShipsValid)
+            {
                 throw new ArgumentException($"Ships are not valid for this board:{Environment.NewLine}" +
                     string.Join(Environment.NewLine, errors),
                     nameof(ships));
+            }
 
             foreach (var ship in ships)
             {
@@ -85,7 +96,9 @@ namespace Battleships.Grid
             }
 
             if (shipsAreaSum > BoardArea)
+            {
                 yield return $"Sum of ships size: {shipsAreaSum} cannot exceed board area: {BoardArea}.";
+            }
         }
 
         private ShipPosition GetRandomValidPositionForShip(int size)
@@ -112,7 +125,9 @@ namespace Battleships.Grid
             } while (attempt < MaxPositioningAttempts && !IsPositionValid(pos, size));
 
             if (attempt == MaxPositioningAttempts)
+            {
                 throw new TimeoutException("Unable to place the ship correctly");
+            }
 
             return pos;
         }
@@ -124,10 +139,14 @@ namespace Battleships.Grid
         private IEnumerable<Direction> GetDirectionsAllowedForShip(int shipSize)
         {
             if (shipSize <= Height)
+            {
                 yield return Direction.Down;
+            }
 
             if (shipSize <= Width)
+            {
                 yield return Direction.Right;
+            }
         }
 
         private bool IsPositionValid(ShipPosition pos, int shipSize)
@@ -138,7 +157,9 @@ namespace Battleships.Grid
             for (int i = 0; i < shipSize; ++i)
             {
                 if (board[pos.YStart + i * yCoefficient][pos.XStart + i * xCoefficient] != Field.Empty)
+                {
                     return false;
+                }
             }
 
             return true;
@@ -181,12 +202,16 @@ namespace Battleships.Grid
         public void InitPlayerToken(Guid playerToken)
         {
             if (playerToken == Guid.Empty)
+            {
                 throw new InvalidOperationException("Empty player token.");
+            }
 
-            if (this.PlayerToken != Guid.Empty)
+            if (PlayerToken != Guid.Empty)
+            {
                 throw new InvalidOperationException("Player token was already set.");
+            }
 
-            this.PlayerToken = playerToken;
+            PlayerToken = playerToken;
         }
     }
 }

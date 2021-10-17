@@ -35,7 +35,9 @@ namespace Battleships.Tests
                 for (int j = 0; j < board.Width; ++j)
                 {
                     if (board[i, j] == Field.ShipUp)
+                    {
                         ++upFieldsCount;
+                    }
                 }
             }
             Assert.Equal(upFieldsCount, board.UpFields);

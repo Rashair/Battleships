@@ -1,6 +1,4 @@
-﻿using Battleships.Grid;
-using Battleships.Settings;
-using System;
+﻿using Battleships.Settings;
 
 namespace Battleships.GameLogic
 {
@@ -72,7 +70,9 @@ namespace Battleships.GameLogic
 
             winner = null;
             if (isGameFinished)
+            {
                 winner = GetWinner(player1Won, player2Won);
+            }
 
             return isGameFinished;
         }

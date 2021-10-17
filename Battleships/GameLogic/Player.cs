@@ -1,6 +1,6 @@
-﻿using Battleships.Grid;
+﻿using System;
+using Battleships.Grid;
 using Battleships.Settings;
-using System;
 
 namespace Battleships.GameLogic
 {
@@ -14,9 +14,9 @@ namespace Battleships.GameLogic
         public Guid Token { get; }
         public Board Board { get; }
 
-        public Player(IOManager _ioManager, Board board, string name, Random? random = null)
+        public Player(IOManager ioManager, Board board, string name, Random? random = null)
         {
-            this.ioManager = _ioManager;
+            this.ioManager = ioManager;
             Board = board;
             Name = name;
             Token = Guid.NewGuid();
@@ -24,9 +24,11 @@ namespace Battleships.GameLogic
             board.InitPlayerToken(Token);
 
             this.random = random ?? new();
-            this.shootingBoard = new bool[Board.Height][];
+            shootingBoard = new bool[Board.Height][];
             for (int i = 0; i < Board.Height; ++i)
+            {
                 shootingBoard[i] = new bool[Board.Width];
+            }
         }
 
         public bool ShootField(Judge judge)
@@ -41,7 +43,9 @@ namespace Battleships.GameLogic
                 (y, x) = GetNextFieldWithinBoard(y, x);
 
                 if (x == initX && y == initY)
+                {
                     throw new InvalidOperationException("All fields were already shot");
+                }
             }
 
             return ShootField(judge, y, x);

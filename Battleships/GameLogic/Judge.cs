@@ -1,5 +1,5 @@
-﻿using Battleships.Grid;
-using System;
+﻿using System;
+using Battleships.Grid;
 
 namespace Battleships.GameLogic
 {

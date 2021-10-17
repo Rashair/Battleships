@@ -1,5 +1,4 @@
-﻿using Battleships;
-using Battleships.GameLogic;
+﻿using Battleships.GameLogic;
 using Battleships.Grid;
 using Battleships.Settings;
 
