@@ -24,7 +24,6 @@ do
     var ships = ShipsGenerator.Generate(gameSettings);
 
     bool shouldRetry = false;
-
     do
     {
         try
@@ -47,34 +46,24 @@ ioManager.WriteBoard(board1);
 ioManager.WriteBoard(board2);
 
 var judge = new Judge(board1, board2);
-var player1 = new Player(board1);
-var player2 = new Player(board2);
+var player1 = new Player(ioManager, board1, "Player-1");
+var player2 = new Player(ioManager, board2, "Player-2");
 var game = new Game(ioManager, judge, player1, player2);
 
 var shouldStartGame = ioManager.GetBooleanInput("Do you want to start the game?");
 if (shouldStartGame)
 {
-    Player? winner;
-    do
-    {
-        game.MakeATurn();
-        ioManager.WriteBoard(board1);
-        ioManager.WriteBoard(board2);
-    } while (!game.IsGameFinished(out winner));
+    var winner = game.Run();
 
     if (winner == null)
     {
         ioManager.WriteLine("It's a draw!");
     }
-    else if (winner == player1)
+    else
     {
-        ioManager.WriteLine("Player1 won!!!");
-    }
-    else if (winner == player2)
-    {
-        ioManager.WriteLine("Player2 won!!!");
+        ioManager.WriteLine($"{winner.Name} won!!!");
     }
 }
 
-
+ioManager.WriteLine("Exiting...");
 ioManager.ReadLine();

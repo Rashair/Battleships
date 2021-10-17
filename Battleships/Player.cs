@@ -1,40 +1,38 @@
 ﻿using Battleships.Grid;
+using Battleships.Settings;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Battleships
 {
     public class Player
     {
-        private readonly Board ownBoard;
+        private readonly IOManager ioManager;
         private readonly Random random;
         private readonly bool[][] shootingBoard;
 
-        private int BoardWidth => ownBoard.Width;
-        private int BoardHeight => ownBoard.Height;
-
+        public string Name { get; }
         public Guid Token { get; }
+        public Board Board { get; }
 
-        public Player(Board board, Random? random = null)
+        public Player(IOManager ioManager, Board board, string name, Random? random = null)
         {
+            this.ioManager = ioManager;
+            this.Board = board;
+            this.Name = name;
             this.Token = Guid.NewGuid();
-            this.ownBoard = board;
+              
             board.InitPlayerToken(this);
 
             this.random = random ?? new();
-
-            this.shootingBoard = new bool[BoardHeight][];
-            for (int i = 0; i < BoardHeight; ++i)
-                this.shootingBoard[i] = new bool[BoardWidth];
+            this.shootingBoard = new bool[Board.Height][];
+            for (int i = 0; i < Board.Height; ++i)
+                shootingBoard[i] = new bool[Board.Width];
         }
 
-        public bool ShootBoardField(Judge judge)
+        public bool ShootField(Judge judge)
         {
-            int y = random.Next(BoardHeight);
-            int x = random.Next(BoardWidth);
+            int y = random.Next(Board.Height);
+            int x = random.Next(Board.Width);
 
             int initY = y;
             int initX = x;
@@ -43,12 +41,17 @@ namespace Battleships
                 (y, x) = GetNextFieldWithinBoard(y, x);
 
                 if (x == initX && y == initY)
-                {
                     throw new InvalidOperationException("All fields were already shot");
-                }
             }
 
+            return ShootField(judge, y, x);
+        }
+
+        private bool ShootField(Judge judge, int y, int x)
+        {
             var wasShotSuccessful = judge.Shoot(Token, y, x);
+            // We always want to set shooting board after judge.Shoot in case something happens.
+            // In that case we wouldn't want Player to think that they already had shot a field that they actually didn't. 
             shootingBoard[y][x] = true;
             return wasShotSuccessful;
         }
@@ -56,15 +59,22 @@ namespace Battleships
         private (int y, int x) GetNextFieldWithinBoard(int y, int x)
         {
             ++x;
-            if (x == BoardWidth)
+            if (x == Board.Width)
             {
                 x = 0;
                 ++y;
-                if (y == BoardHeight)
+                if (y == Board.Height)
+                {
                     y = 0;
+                }
             }
 
             return (y, x);
+        }
+
+        public void DisplayState()
+        {
+            ioManager.WriteBoard(Board);
         }
     }
 }

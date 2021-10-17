@@ -11,7 +11,6 @@ namespace Battleships
         private readonly Player player1;
         private readonly Player player2;
 
-
         public Game(IOManager ioManager,
             Judge judge,
             Player player1,
@@ -23,11 +22,28 @@ namespace Battleships
             this.player2 = player2;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Winner of the game</returns>
+        public Player? Run()
+        {
+            Player? winner;
+            while (!IsGameFinished(out winner))
+            {
+                MakeATurn();
+            }
+
+            return winner;
+        }
+
         public void MakeATurn()
         {
-            player1.ShootBoardField(judge);
+            player1.ShootField(judge);
+            player2.ShootField(judge);
 
-            player2.ShootBoardField(judge);
+            player1.DisplayState();
+            player2.DisplayState();
         }
 
         public bool IsGameFinished(out Player? winner)
@@ -36,22 +52,26 @@ namespace Battleships
             var player2Won = judge.DidPlayerWin(player2.Token);
             var isGameFinished = player1Won || player2Won;
 
+            winner = null;
+            if (isGameFinished)
+                winner = GetWinner(player1Won, player2Won);
+
+            return isGameFinished;
+        }
+
+        private Player? GetWinner(bool player1Won, bool player2Won)
+        {
             if (player1Won && !player2Won)
             {
-                winner = player1;
-
+                return player1;
             }
             else if (player2Won && !player1Won)
             {
-                winner = player2;
-            }
-            else
-            {
-                // Draw or game not finished
-                winner = null;
+                return player2;
             }
 
-            return isGameFinished;
+            // Winner is null when we have draw.
+            return null;
         }
     }
 }
