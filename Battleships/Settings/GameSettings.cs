@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Battleships.Extensions;
 using Battleships.Ships;
@@ -26,7 +27,7 @@ namespace Battleships.Settings
             }
         }
 
-        public IEnumerable<Ship> AllShips => shipsNum.Keys;
+        public IEnumerable<Ship> AllShipsOrderedBySize => shipsNum.Keys.OrderBy(k => k.Size);
         public IReadOnlyDictionary<Ship, int> AllShipsWithCount => shipsNum;
 
         public int BoardHeight { get; set; }
@@ -46,7 +47,7 @@ namespace Battleships.Settings
                     $" {LineSeparator(sizeHeader.Length)} |" +
                     $" {LineSeparator(countHeader.Length)} |");
 
-            foreach (var entry in shipsNum)
+            foreach (var entry in shipsNum.OrderBy(s => s.Key.Size).ThenBy(x => x.Value))
             {
                 var ship = entry.Key;
                 builder.Append($"|  {ship.Name.PadRight(GetPad(typeHeader))} ")

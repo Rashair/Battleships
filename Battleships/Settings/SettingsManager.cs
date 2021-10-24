@@ -54,7 +54,7 @@ namespace Battleships.Settings
                 return;
             }
 
-            var ships = gameSettings.AllShips;
+            var ships = gameSettings.AllShipsOrderedBySize;
             foreach (var ship in ships)
             {
                 input = ioManager.GetIntegerInput($"Provide {ship.Name} no.");
