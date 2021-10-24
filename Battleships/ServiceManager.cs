@@ -1,5 +1,5 @@
 ﻿using System;
-using Battleships.GameLogic;
+using Battleships.GameLogic.Factories;
 using Battleships.Grid;
 using Battleships.Init;
 using Battleships.IO;
@@ -9,13 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Battleships
 {
-    public class ServiceManager
+    public class ServiceManager : ServiceCollectionWrapper
     {
-        private readonly ServiceProvider serviceProvider;
-
-        public ServiceManager()
+        public void InitDefault()
         {
-            var services = new ServiceCollection();
+            services = new ServiceCollection();
             services.AddSingleton<IIOManager, IOManager>();
             services.AddTransient<Random>();
 
@@ -28,13 +26,11 @@ namespace Battleships
             services.AddSingleton<JudgeFactory>();
             services.AddSingleton<PlayerFactory>();
             services.AddSingleton<GameFactory>();
-
-            serviceProvider = services.BuildServiceProvider();
         }
 
         public IServiceProvider GetServiceProvider()
         {
-            return serviceProvider;
+            return services.BuildServiceProvider();
         }
     }
 }

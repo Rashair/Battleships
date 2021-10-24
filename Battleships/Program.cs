@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using Battleships;
-using Battleships.GameLogic;
+using Battleships.GameLogic.Factories;
 using Battleships.Grid;
 using Battleships.Init;
 using Battleships.IO;
@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 {
     var serviceManager = new ServiceManager();
+    serviceManager.InitDefault();
     var serviceProvider = serviceManager.GetServiceProvider();
 
     var ioManager = serviceProvider.GetRequiredService<IIOManager>();
