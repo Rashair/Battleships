@@ -4,21 +4,27 @@ using System.Linq;
 using Battleships.Settings;
 using Battleships.Ships;
 using Battleships.Tests;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Battleships.Grid.Tests
 {
     public class BoardTests : TestsBase
     {
-        private readonly Random random = new(1234);
+        private static Random RandomInstance => new(1234);
+
+        public BoardTests()
+        {
+            serviceManager.InitDefault();
+            serviceManager.AddTransient(f => RandomInstance);
+        }
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(BoardAndShips_Valid_TestData))]
         public void Init_ShouldGenerateAllShips(GameSettings gameSettings)
         {
             // Arrange
-            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
-            var ships = ShipsGenerator.Generate(gameSettings);
+            var (board, ships) = CreateBoardAndShips(gameSettings);
 
             // Act
             board.Init(ships);
@@ -41,6 +47,18 @@ namespace Battleships.Grid.Tests
                 }
             }
             Assert.Equal(upFieldsCount, board.UpFields);
+        }
+
+        private (Board board, List<Ship> ships) CreateBoardAndShips(GameSettings gameSettings)
+        {
+            var serviceProvider = serviceManager.GetServiceProvider();
+            var boardFactory = serviceProvider.GetRequiredService<BoardFactory>();
+            var board = boardFactory.Create(gameSettings.BoardHeight, gameSettings.BoardWidth);
+
+            var shipsGenerator = serviceProvider.GetRequiredService<ShipsGenerator>();
+            var ships = shipsGenerator.Generate(gameSettings);
+
+            return (board, ships);
         }
 
         public static IEnumerable<object[]> BoardAndShips_Valid_TestData =>
@@ -134,8 +152,7 @@ namespace Battleships.Grid.Tests
            GameSettings gameSettings)
         {
             // Arrange
-            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
-            var ships = ShipsGenerator.Generate(gameSettings);
+            var (board, ships) = CreateBoardAndShips(gameSettings);
 
             // Act && Assert
             var ex = Assert.Throws<TimeoutException>(() => board.Init(ships));
@@ -153,7 +170,7 @@ namespace Battleships.Grid.Tests
                 BattleshipsNum = 3,
                 CruisersNum = 3,
                 SubmarinesNum = 4,
-                DestroyersNum = 4,
+                DestroyersNum = 5,
             }),
         };
 
@@ -163,8 +180,7 @@ namespace Battleships.Grid.Tests
             GameSettings gameSettings)
         {
             // Arrange
-            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
-            var ships = ShipsGenerator.Generate(gameSettings);
+            var (board, ships) = CreateBoardAndShips(gameSettings);
 
             // Act && Assert
             var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));
@@ -261,8 +277,7 @@ namespace Battleships.Grid.Tests
         public void Init_WhenShipSizeExceedsDimensionOfBoard_ShouldThrow(
             GameSettings gameSettings)
         {
-            var board = new Board(gameSettings.BoardHeight, gameSettings.BoardWidth, random);
-            var ships = ShipsGenerator.Generate(gameSettings);
+            var (board, ships) = CreateBoardAndShips(gameSettings);
 
             // Act && Assert
             var ex = Assert.Throws<ArgumentException>(() => board.Init(ships));

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using Battleships.Grid;
 using Battleships.Grid.Helpers;
+using Battleships.Init;
+using Battleships.IO;
 using Battleships.Settings;
 using Battleships.Tests;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -12,6 +15,13 @@ namespace Battleships.GameLogic.Tests
     public class JudgeTests : TestsBase
     {
         private static Random RandomInstance => new(123);
+
+        public JudgeTests()
+        {
+            serviceManager.InitDefault();
+            serviceManager.AddTransient(f => RandomInstance);
+        }
+
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(Shoot_TestData))]
@@ -88,7 +98,7 @@ namespace Battleships.GameLogic.Tests
             Assert.False(field.WasShot(), $"Field ({y},{x}) should not have been shot.");
         }
 
-        private static (Board board1, Board board2) InitBoards(GameSettings gameSettings)
+        private (Board board1, Board board2) InitBoards(GameSettings gameSettings)
         {
             var ioManager = new Mock<IIOManager>();
             ioManager.Setup(x =>
@@ -101,8 +111,10 @@ namespace Battleships.GameLogic.Tests
                x.GetBooleanInput(It.IsAny<string>()))
                .Returns(true);
 
-            var settingsManager = new SettingsManager(ioManager.Object, gameSettings, RandomInstance);
-            return settingsManager.InitializeGame();
+            serviceManager.AddSingleton(ioManager.Object);
+
+            var gameInitializer = serviceManager.GetServiceProvider().GetRequiredService<GameInitializer>();
+            return gameInitializer.Initialize();
         }
     }
 }
