@@ -5,6 +5,7 @@ using Battleships.Settings;
 using Battleships.Ships;
 using Battleships.Tests;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace Battleships.Grid.Tests
@@ -16,7 +17,7 @@ namespace Battleships.Grid.Tests
         public BoardTests()
         {
             serviceManager.InitDefault();
-            serviceManager.AddTransient(f => RandomInstance);
+            serviceManager.Replace(ServiceDescriptor.Transient(f => RandomInstance));
         }
 
         [Theory(Timeout = DefaultTimeoutMs)]

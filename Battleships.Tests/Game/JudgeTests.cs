@@ -7,6 +7,7 @@ using Battleships.IO;
 using Battleships.Settings;
 using Battleships.Tests;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Xunit;
 
@@ -19,9 +20,8 @@ namespace Battleships.GameLogic.Tests
         public JudgeTests()
         {
             serviceManager.InitDefault();
-            serviceManager.AddTransient(f => RandomInstance);
+            serviceManager.Replace(ServiceDescriptor.Transient(f => RandomInstance));
         }
-
 
         [Theory(Timeout = DefaultTimeoutMs)]
         [MemberData(nameof(Shoot_TestData))]
@@ -111,7 +111,7 @@ namespace Battleships.GameLogic.Tests
                x.GetBooleanInput(It.IsAny<string>()))
                .Returns(true);
 
-            serviceManager.AddSingleton(ioManager.Object);
+            serviceManager.Replace(ServiceDescriptor.Singleton(ioManager.Object));
 
             var gameInitializer = serviceManager.GetServiceProvider().GetRequiredService<GameInitializer>();
             return gameInitializer.Initialize();
