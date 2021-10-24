@@ -7,32 +7,25 @@ namespace Battleships.Settings
     public class SettingsManager
     {
         private readonly IIOManager ioManager;
-
-        public GameSettings GameSettings { get; private set; }
-
+        private readonly GameSettings gameSettings;
 
         public SettingsManager(IIOManager ioManager,
-            IEnumerable<Ship> shipTypes)
+            GameSettings gameSettings)
         {
             this.ioManager = ioManager;
-
-            GameSettings = new();
-            foreach (var ship in shipTypes)
-            {
-                GameSettings.AddShip(ship, ship.DefaultCount);
-            }
+            this.gameSettings = gameSettings;
         }
 
         public GameSettings InitalizeGameSettings()
         {
             ioManager.WriteLine("The default settings are:");
-            ioManager.WriteLine(GameSettings.ToString());
+            ioManager.WriteLine(gameSettings.ToString());
 
             HandleSettingsModification();
             ioManager.WriteLine("The updated settings are:");
-            ioManager.WriteLine(GameSettings.ToString());
+            ioManager.WriteLine(gameSettings.ToString());
 
-            return GameSettings;
+            return gameSettings;
         }
 
         private void HandleSettingsModification()
@@ -47,13 +40,13 @@ namespace Battleships.Settings
             int? input = ioManager.GetIntegerInput("Provide board height");
             if (input.HasValue)
             {
-                GameSettings.BoardHeight = input.Value;
+                gameSettings.BoardHeight = input.Value;
             }
 
             input = ioManager.GetIntegerInput("Provide board width");
             if (input.HasValue)
             {
-                GameSettings.BoardWidth = input.Value;
+                gameSettings.BoardWidth = input.Value;
             }
 
             var stillWantsToModifyDefaultSettings = ioManager
@@ -63,13 +56,13 @@ namespace Battleships.Settings
                 return;
             }
 
-            var ships = GameSettings.AllShips;
+            var ships = gameSettings.AllShips;
             foreach (var ship in ships)
             {
                 input = ioManager.GetIntegerInput($"Provide {ship.Name} no.");
                 if (input.HasValue)
                 {
-                    GameSettings.SetShipCount(ship, input.Value);
+                    gameSettings.SetShipCount(ship, input.Value);
                 }
             }
             ioManager.WriteLine();

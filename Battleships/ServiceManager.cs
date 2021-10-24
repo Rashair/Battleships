@@ -16,8 +16,8 @@ namespace Battleships
         {
             base.InitDefault();
             services.AddSingleton<IIOManager, IOManager>();
-            services.AddTransient<Random>();
 
+            services.AddSingleton<GameSettings>();
             services.AddSingleton<SettingsManager>();
 
             services.AddSingleton<ShipsGenerator>();
@@ -28,6 +28,7 @@ namespace Battleships
             services.AddSingleton<PlayerFactory>();
             services.AddSingleton<GameFactory>();
 
+            services.AddTransient<Random>();
             RegisterallShips();
         }
 

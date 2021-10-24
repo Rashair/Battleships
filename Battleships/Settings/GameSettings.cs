@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Battleships.Extensions;
@@ -9,11 +10,20 @@ namespace Battleships.Settings
     {
         private readonly Dictionary<Ship, int> shipsNum;
 
-        public GameSettings()
+        internal GameSettings()
         {
             shipsNum = new Dictionary<Ship, int>();
             BoardHeight = 12;
             BoardWidth = 12;
+        }
+
+        public GameSettings(IEnumerable<Ship> shipTypes)
+            : this()
+        {
+            foreach (var ship in shipTypes)
+            {
+                shipsNum.Add(ship, ship.DefaultCount);
+            }
         }
 
         public IEnumerable<Ship> AllShips => shipsNum.Keys;
@@ -57,14 +67,17 @@ namespace Battleships.Settings
             return header.Length - 1;
         }
 
-        public void AddShip(Ship ship, int count)
-        {
-            shipsNum.Add(ship, count);
-        }
-
         public void SetShipCount(Ship ship, int count)
         {
             shipsNum[ship] = count;
+        }
+
+        public GameSettings Add<T>(int count)
+            where T : Ship
+        {
+            var instance = (Ship)Activator.CreateInstance(typeof(T))!;
+            shipsNum.Add(instance, count);
+            return this;
         }
     }
 }

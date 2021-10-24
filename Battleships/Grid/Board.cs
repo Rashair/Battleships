@@ -233,11 +233,13 @@ namespace Battleships.Grid
         public override string? ToString()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append('-', 2 * Width);
+            int separatorCount = 2 * Width + 1;
+            stringBuilder.Append('-', separatorCount);
             stringBuilder.AppendLine();
 
             for (int y = 0; y < Height; ++y)
             {
+                stringBuilder.Append('|');
                 for (int x = 0; x < Width; ++x)
                 {
                     stringBuilder.Append(board[y][x].ToFormattedString());
@@ -246,7 +248,7 @@ namespace Battleships.Grid
                 stringBuilder.AppendLine();
             }
 
-            stringBuilder.Append('-', 2 * Width);
+            stringBuilder.Append('-', separatorCount);
             stringBuilder.AppendLine();
             stringBuilder.AppendLine();
 
