@@ -1,5 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-using Battleships;
+using Battleships.DI;
 using Battleships.GameLogic.Factories;
 using Battleships.Grid;
 using Battleships.Init;
