@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Battleships.Grid;
 using Battleships.IO;
 
-namespace Battleships.GameLogic
+namespace Battleships.GameLogic.Factories
 {
     public class PlayerFactory
     {

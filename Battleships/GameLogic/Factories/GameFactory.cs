@@ -1,17 +1,19 @@
-﻿using Battleships.GameLogic;
-using Battleships.IO;
+﻿using Battleships.IO;
 
-public class GameFactory
+namespace Battleships.GameLogic.Factories
 {
-    private readonly IIOManager ioManager;
-
-    public GameFactory(IIOManager ioManager)
+    public class GameFactory
     {
-        this.ioManager = ioManager;
-    }
+        private readonly IIOManager ioManager;
 
-    public Game Create(Judge judge, Player player1, Player player2)
-    {
-        return new Game(ioManager, judge, player1, player2);
+        public GameFactory(IIOManager ioManager)
+        {
+            this.ioManager = ioManager;
+        }
+
+        public Game Create(Judge judge, Player player1, Player player2)
+        {
+            return new Game(ioManager, judge, player1, player2);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Battleships.Grid;
 
-namespace Battleships.GameLogic
+namespace Battleships.GameLogic.Factories
 {
     public class JudgeFactory
     {

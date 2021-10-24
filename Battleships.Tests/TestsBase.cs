@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Battleships.Tests
+﻿namespace Battleships.Tests
 {
     public class TestsBase
     {

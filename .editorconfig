@@ -18,3 +18,4 @@ dotnet_style_qualification_for_event=false:suggestion
 dotnet_diagnostic.IDE2002.severity=warning
 csharp_indent_braces=false
 dotnet_diagnostic.IDE0011.severity=suggestion
+dotnet_diagnostic.IDE0060.severity=suggestion
