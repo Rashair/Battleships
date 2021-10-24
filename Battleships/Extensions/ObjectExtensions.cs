@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Battleships.Extensions
+﻿namespace Battleships.Extensions
 {
     public static class ObjectExtensions
     {

@@ -57,7 +57,7 @@ namespace Battleships.GameLogic.Tests
                 BoardHeight = 3,
                 BoardWidth = 3,
             }
-                
+
              .Add<Carrier>(0)
              .Add<Battleship>(0)
              .Add<Cruiser>(0)

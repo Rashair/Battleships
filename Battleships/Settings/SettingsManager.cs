@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Battleships.IO;
-using Battleships.Ships;
+﻿using Battleships.IO;
 
 namespace Battleships.Settings
 {
