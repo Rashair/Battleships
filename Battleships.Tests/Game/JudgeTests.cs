@@ -5,6 +5,7 @@ using Battleships.Grid.Helpers;
 using Battleships.Init;
 using Battleships.IO;
 using Battleships.Settings;
+using Battleships.Ships;
 using Battleships.Tests;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -55,22 +56,25 @@ namespace Battleships.GameLogic.Tests
             {
                 BoardHeight = 3,
                 BoardWidth = 3,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 3,
-                DestroyersNum = 0,
-            }),
+            }
+                
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(3)
+             .Add<Destroyer>(0)
+            ),
             GenerateTestCase(new GameSettings   // empty board 
             {
                 BoardHeight = 3,
                 BoardWidth = 3,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 0,
-                DestroyersNum = 0,
-            }),
+            }
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(0)
+             .Add<Destroyer>(0)
+            ),
         };
 
         [Theory(Timeout = DefaultTimeoutMs)]
@@ -112,6 +116,7 @@ namespace Battleships.GameLogic.Tests
                .Returns(true);
 
             serviceManager.Replace(ServiceDescriptor.Singleton(ioManager.Object));
+            serviceManager.Replace(ServiceDescriptor.Singleton(gameSettings));
 
             var gameInitializer = serviceManager.GetServiceProvider().GetRequiredService<GameInitializer>();
             return gameInitializer.Initialize();

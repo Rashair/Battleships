@@ -69,82 +69,90 @@ namespace Battleships.Grid.Tests
             {
                 BoardHeight = 10,
                 BoardWidth = 10,
-                CarriersNum = 1,
-                BattleshipsNum = 2,
-                CruisersNum = 3,
-                SubmarinesNum = 3,
-                DestroyersNum = 4,
-            }),
+            }
+             .Add<Carrier>(1)
+             .Add<Battleship>(2)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(3)
+             .Add<Destroyer>(4)
+            ),
             GenerateTestCase(new GameSettings     // odd size 
             {
                 BoardHeight = 9,
                 BoardWidth = 9,
-                CarriersNum = 1,
-                BattleshipsNum = 2,
-                CruisersNum = 3,
-                SubmarinesNum = 3,
-                DestroyersNum = 4,
-            }),
+            }
+             .Add<Carrier>(1)
+             .Add<Battleship>(2)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(3)
+             .Add<Destroyer>(4)
+            ),
             GenerateTestCase(new GameSettings    // very high 
             {
                 BoardHeight = 25,
                 BoardWidth = 5,
-                CarriersNum = 1,
-                BattleshipsNum = 2,
-                CruisersNum = 3,
-                SubmarinesNum = 3,
-                DestroyersNum = 4,
-            }),
+            }
+             .Add<Carrier>(1)
+             .Add<Battleship>(2)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(3)
+             .Add<Destroyer>(4)
+            ),
             GenerateTestCase(new GameSettings    // very wide 
             {
                 BoardHeight = 5,
                 BoardWidth = 24,
-                CarriersNum = 1,
-                BattleshipsNum = 2,
-                CruisersNum = 3,
-                SubmarinesNum = 3,
-                DestroyersNum = 4,
-            }),
+            }
+             .Add<Carrier>(1)
+             .Add<Battleship>(2)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(3)
+             .Add<Destroyer>(4)
+            ),
             GenerateTestCase(new GameSettings   // only destroyers 
             {
                 BoardHeight = 12,
                 BoardWidth = 12,
-                CarriersNum = 18,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 0,
-                DestroyersNum = 0,
-            }),
+            }
+             .Add<Carrier>(18)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(0)
+             .Add<Destroyer>(0)
+            ),
             GenerateTestCase(new GameSettings    // only destroyers + full board 
             {
                 BoardHeight = 20,
                 BoardWidth = 2,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 0,
-                DestroyersNum = 10,
-            }),
+            }
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(0)
+             .Add<Destroyer>(10)
+            ),
             GenerateTestCase(new GameSettings     // small board 
             {
                 BoardHeight = 3,
                 BoardWidth = 3,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 1,
-                SubmarinesNum = 1,
-                DestroyersNum = 1,
-            }),
+            }
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(1)
+             .Add<Submarine>(1)
+             .Add<Destroyer>(1)
+            ),
             GenerateTestCase(new GameSettings     // empty 
             {
                 BoardHeight = 9,
                 BoardWidth = 9,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 0,
-                DestroyersNum = 0,
-            }),
+            }
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(0)
+             .Add<Destroyer>(0)
+            ),
         };
 
         [Theory(Timeout = DefaultTimeoutMs)]
@@ -167,12 +175,13 @@ namespace Battleships.Grid.Tests
             {
                 BoardHeight = 2,
                 BoardWidth = 24,
-                CarriersNum = 1,
-                BattleshipsNum = 3,
-                CruisersNum = 3,
-                SubmarinesNum = 4,
-                DestroyersNum = 5,
-            }),
+            }
+             .Add<Carrier>(1)
+             .Add<Battleship>(3)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(4)
+             .Add<Destroyer>(5)
+            ),
         };
 
         [Theory(Timeout = DefaultTimeoutMs)]
@@ -195,82 +204,90 @@ namespace Battleships.Grid.Tests
                 {
                 BoardHeight = 1,
                 BoardWidth = 1,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 0,
-                DestroyersNum = 1,
-                }),
+            }
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(0)
+             .Add<Destroyer>(1)
+                ),
                 GenerateTestCase(new GameSettings    // even size 
                 {
                 BoardHeight = 4,
                 BoardWidth = 4,
-                CarriersNum = 1,
-                BattleshipsNum = 2,
-                CruisersNum = 3,
-                SubmarinesNum = 3,
-                DestroyersNum = 4,
-                }),
+            }
+             .Add<Carrier>(1)
+             .Add<Battleship>(2)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(3)
+             .Add<Destroyer>(4)
+                ),
                 GenerateTestCase(new GameSettings    // odd size 
                 {
                 BoardHeight = 3,
                 BoardWidth = 3,
-                CarriersNum = 1,
-                BattleshipsNum = 2,
-                CruisersNum = 3,
-                SubmarinesNum = 3,
-                DestroyersNum = 4,
-                }),
+            }
+             .Add<Carrier>(1)
+             .Add<Battleship>(2)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(3)
+             .Add<Destroyer>(4)
+                ),
                 GenerateTestCase(new GameSettings   // very high 
                 {
                 BoardHeight = 25,
                 BoardWidth = 2,
-                CarriersNum = 2,
-                BattleshipsNum = 4,
-                CruisersNum = 4,
-                SubmarinesNum = 4,
-                DestroyersNum = 6,
-                }),
+            }
+             .Add<Carrier>(2)
+             .Add<Battleship>(4)
+             .Add<Cruiser>(4)
+             .Add<Submarine>(4)
+             .Add<Destroyer>(6)
+                ),
                 GenerateTestCase(new GameSettings   // very wide 
                 {
                 BoardHeight = 2,
                 BoardWidth = 24,
-                CarriersNum = 3,
-                BattleshipsNum = 3,
-                CruisersNum = 3,
-                SubmarinesNum = 4,
-                DestroyersNum = 5,
-                }),
+            }
+             .Add<Carrier>(3)
+             .Add<Battleship>(3)
+             .Add<Cruiser>(3)
+             .Add<Submarine>(4)
+             .Add<Destroyer>(5)
+                ),
                 GenerateTestCase(new GameSettings   // only carriers 
                 {
                 BoardHeight = 10,
                 BoardWidth = 10,
-                CarriersNum = 21,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 0,
-                DestroyersNum = 0,
-                }),
+            }
+             .Add<Carrier>(21)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(0)
+             .Add<Destroyer>(0)
+                ),
                 GenerateTestCase(new GameSettings    // only destroyers 
                 {
                 BoardHeight = 20,
                 BoardWidth = 1,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 0,
-                SubmarinesNum = 0,
-                DestroyersNum = 21,
-                }),
+            }
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(0)
+             .Add<Submarine>(0)
+             .Add<Destroyer>(21)
+                ),
                 GenerateTestCase(new GameSettings     // small board 
                 {
                 BoardHeight = 3,
                 BoardWidth = 3,
-                CarriersNum = 0,
-                BattleshipsNum = 0,
-                CruisersNum = 1,
-                SubmarinesNum = 1,
-                DestroyersNum = 6,
-                }),
+            }
+             .Add<Carrier>(0)
+             .Add<Battleship>(0)
+             .Add<Cruiser>(1)
+             .Add<Submarine>(1)
+             .Add<Destroyer>(6)
+                ),
             };
 
         [Theory(Timeout = DefaultTimeoutMs)]
@@ -292,42 +309,46 @@ namespace Battleships.Grid.Tests
                 {
                     BoardHeight = 3,
                     BoardWidth = 3,
-                    CarriersNum = 0,
-                    BattleshipsNum = 1,
-                    CruisersNum = 0,
-                    SubmarinesNum = 0,
-                    DestroyersNum = 0,
-                }),
+            }
+                 .Add<Carrier>(0)
+                 .Add<Battleship>(1)
+                 .Add<Cruiser>(0)
+                 .Add<Submarine>(0)
+                 .Add<Destroyer>(0)
+                ),
                 GenerateTestCase(new GameSettings    // area fits, but not dimensions 
                 {
                     BoardHeight = 2,
                     BoardWidth = 3,
-                    CarriersNum = 0,
-                    BattleshipsNum = 1,
-                    CruisersNum = 0,
-                    SubmarinesNum = 0,
-                    DestroyersNum = 0,
-                }),
+            }
+                 .Add<Carrier>(0)
+                 .Add<Battleship>(1)
+                 .Add<Cruiser>(0)
+                 .Add<Submarine>(0)
+                 .Add<Destroyer>(0)
+                ),
                 GenerateTestCase(new GameSettings    // one fits, second not 
                 {
                     BoardHeight = 2,
                     BoardWidth = 3,
-                    CarriersNum = 0,
-                    BattleshipsNum = 1,
-                    CruisersNum = 0,
-                    SubmarinesNum = 1,
-                    DestroyersNum = 0,
-                }),
+            }
+                 .Add<Carrier>(0)
+                 .Add<Battleship>(1)
+                 .Add<Cruiser>(0)
+                 .Add<Submarine>(1)
+                 .Add<Destroyer>(0)
+                ),
                 GenerateTestCase(new GameSettings    // only biggest does not fit 
                 {
                     BoardHeight = 4,
                     BoardWidth = 4,
-                    CarriersNum = 1,
-                    BattleshipsNum = 1,
-                    CruisersNum = 1,
-                    SubmarinesNum = 1,
-                    DestroyersNum = 1,
-                }),
+            }
+                 .Add<Carrier>(1)
+                 .Add<Battleship>(1)
+                 .Add<Cruiser>(1)
+                 .Add<Submarine>(1)
+                 .Add<Destroyer>(1)
+                ),
            };
     }
 }
