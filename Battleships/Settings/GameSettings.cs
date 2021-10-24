@@ -1,30 +1,70 @@
+using System.Collections.Generic;
+using System.Text;
+using Battleships.Extensions;
+using Battleships.Ships;
+
 namespace Battleships.Settings
 {
-    public record GameSettings
+    public class GameSettings
     {
-        public int BoardHeight { get; init; } = 12;
-        public int BoardWidth { get; init; } = 12;
+        private readonly Dictionary<Ship, int> shipsNum;
 
-        public int CarriersNum { get; init; } = 1;
-        public int BattleshipsNum { get; init; } = 2;
-        public int CruisersNum { get; init; } = 3;
-        public int SubmarinesNum { get; init; } = 3;
-        public int DestroyersNum { get; init; } = 4;
+        public GameSettings()
+        {
+            shipsNum = new Dictionary<Ship, int>();
+            BoardHeight = 12;
+            BoardWidth = 12;
+        }
+
+        public IEnumerable<Ship> AllShips => shipsNum.Keys;
+        public IReadOnlyDictionary<Ship, int> AllShipsWithCount => shipsNum;
+
+        public int BoardHeight { get; set; }
+        public int BoardWidth { get; set; }
 
         public override string ToString()
         {
-            const int padRight = 8;
+            string typeHeader = "  Class of ship  ";
+            string sizeHeader = "Size";
+            string countHeader = "No. of ships";
 
-            return $@"Board size: {BoardHeight}x{BoardHeight}
+            var builder = new StringBuilder($"Board size: {BoardHeight}x{BoardHeight}")
+                .AppendLine()
+                .AppendLine()
+                .AppendLine($"| {typeHeader} | {sizeHeader} | {countHeader} |")
+                .AppendLine($"| {LineSeparator(typeHeader.Length)} |" +
+                    $" {LineSeparator(sizeHeader.Length)} |" +
+                    $" {LineSeparator(countHeader.Length)} |");
 
-| Class of ship   | Size | No. of ships |
-| --------------- | ---- | ------------ |
-| Carrier         |  5   |      {CarriersNum}{"|",padRight}
-| Battleship      |  4   |      {BattleshipsNum}{"|",padRight}
-| Cruiser         |  3   |      {CruisersNum}{"|",padRight}
-| Submarine       |  3   |      {SubmarinesNum}{"|",padRight}
-| Destroyer       |  2   |      {DestroyersNum}{"|",padRight}
-";
+            foreach (var entry in shipsNum)
+            {
+                var ship = entry.Key;
+                builder.Append($"|  {ship.Name.PadRight(GetPad(typeHeader))} ")
+                       .Append($"|  {ship.Size.PadRight(GetPad(sizeHeader))} ")
+                       .AppendLine($"|  {entry.Value.PadRight(GetPad(countHeader))} |");
+            }
+
+            return builder.ToString();
+        }
+
+        private static string LineSeparator(int length)
+        {
+            return new string('-', length);
+        }
+
+        private static int GetPad(string header)
+        {
+            return header.Length - 1;
+        }
+
+        public void AddShip(Ship ship, int count)
+        {
+            shipsNum.Add(ship, count);
+        }
+
+        public void SetShipCount(Ship ship, int count)
+        {
+            shipsNum[ship] = count;
         }
     }
 }

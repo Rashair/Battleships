@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Battleships.GameLogic.Factories;
 using Battleships.Grid;
 using Battleships.Init;
@@ -11,9 +12,9 @@ namespace Battleships
 {
     public class ServiceManager : ServiceCollectionWrapper
     {
-        public void InitDefault()
+        public override void InitDefault()
         {
-            services = new ServiceCollection();
+            base.InitDefault();
             services.AddSingleton<IIOManager, IOManager>();
             services.AddTransient<Random>();
 
@@ -26,6 +27,22 @@ namespace Battleships
             services.AddSingleton<JudgeFactory>();
             services.AddSingleton<PlayerFactory>();
             services.AddSingleton<GameFactory>();
+
+            RegisterallShips();
+        }
+
+        private void RegisterallShips()
+        {
+            var shipBaseType = typeof(Ship);
+            var assembly = shipBaseType.Assembly;
+            var shipTypes = assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(shipBaseType));
+
+            foreach (var type in shipTypes)
+            {
+                services.AddSingleton(shipBaseType, type);
+                services.AddTransient(type, type);
+            }
         }
 
         public IServiceProvider GetServiceProvider()

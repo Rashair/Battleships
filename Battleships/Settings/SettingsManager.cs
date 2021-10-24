@@ -1,4 +1,6 @@
-﻿using Battleships.IO;
+﻿using System.Collections.Generic;
+using Battleships.IO;
+using Battleships.Ships;
 
 namespace Battleships.Settings
 {
@@ -8,11 +10,17 @@ namespace Battleships.Settings
 
         public GameSettings GameSettings { get; private set; }
 
+
         public SettingsManager(IIOManager ioManager,
-            GameSettings? gameSettings = null)
+            IEnumerable<Ship> shipTypes)
         {
             this.ioManager = ioManager;
-            GameSettings = gameSettings ?? new();
+
+            GameSettings = new();
+            foreach (var ship in shipTypes)
+            {
+                GameSettings.AddShip(ship, ship.DefaultCount);
+            }
         }
 
         public GameSettings InitalizeGameSettings()
@@ -39,13 +47,13 @@ namespace Battleships.Settings
             int? input = ioManager.GetIntegerInput("Provide board height");
             if (input.HasValue)
             {
-                GameSettings = GameSettings with { BoardHeight = input.Value };
+                GameSettings.BoardHeight = input.Value;
             }
 
             input = ioManager.GetIntegerInput("Provide board width");
             if (input.HasValue)
             {
-                GameSettings = GameSettings with { BoardWidth = input.Value };
+                GameSettings.BoardWidth = input.Value;
             }
 
             var stillWantsToModifyDefaultSettings = ioManager
@@ -55,38 +63,16 @@ namespace Battleships.Settings
                 return;
             }
 
-            input = ioManager.GetIntegerInput("Provide carriers no.");
-            if (input.HasValue)
+            var ships = GameSettings.AllShips;
+            foreach (var ship in ships)
             {
-                GameSettings = GameSettings with { CarriersNum = input.Value };
+                input = ioManager.GetIntegerInput($"Provide {ship.Name} no.");
+                if (input.HasValue)
+                {
+                    GameSettings.SetShipCount(ship, input.Value);
+                }
             }
-
-            input = ioManager.GetIntegerInput("Provide battleships no.");
-            if (input.HasValue)
-            {
-                GameSettings = GameSettings with { BattleshipsNum = input.Value };
-            }
-
-            input = ioManager.GetIntegerInput("Provide cruisers no.");
-            if (input.HasValue)
-            {
-                GameSettings = GameSettings with { CruisersNum = input.Value };
-            }
-
-            input = ioManager.GetIntegerInput("Provide submarines no.");
-            if (input.HasValue)
-            {
-                GameSettings = GameSettings with { SubmarinesNum = input.Value };
-            }
-
-            input = ioManager.GetIntegerInput("Provide destroyers no.");
-            if (input.HasValue)
-            {
-                GameSettings = GameSettings with { DestroyersNum = input.Value };
-            };
             ioManager.WriteLine();
         }
-
-
     }
 }

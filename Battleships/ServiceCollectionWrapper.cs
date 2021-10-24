@@ -13,6 +13,13 @@ namespace Battleships
             services = new();
         }
 
+        public virtual void InitDefault()
+        {
+            services = new();
+            services.AddSingleton(GetType(), this);
+            // services.AddSingleton(f => f);
+        }
+
         public int Count => services.Count;
 
         public bool IsReadOnly => services.IsReadOnly;
