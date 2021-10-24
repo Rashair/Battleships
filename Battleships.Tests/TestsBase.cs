@@ -1,4 +1,6 @@
-﻿namespace Battleships.Tests
+﻿using Battleships.DI;
+
+namespace Battleships.Tests
 {
     public class TestsBase
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Battleships
+namespace Battleships.DI
 {
     public class ServiceCollectionWrapper : IServiceCollection
     {

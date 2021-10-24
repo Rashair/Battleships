@@ -8,7 +8,7 @@ using Battleships.Settings;
 using Battleships.Ships;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Battleships
+namespace Battleships.DI
 {
     public class ServiceManager : ServiceCollectionWrapper
     {
