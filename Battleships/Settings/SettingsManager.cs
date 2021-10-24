@@ -1,5 +1,6 @@
 ﻿using System;
 using Battleships.Grid;
+using Battleships.IO;
 using Battleships.Ships;
 
 namespace Battleships.Settings
@@ -7,62 +8,17 @@ namespace Battleships.Settings
     public class SettingsManager
     {
         private readonly IIOManager ioManager;
-        private readonly Random random;
 
         public GameSettings GameSettings { get; private set; }
 
         public SettingsManager(IIOManager ioManager,
-            GameSettings? gameSettings = null,
-            Random? random = null)
+            GameSettings? gameSettings = null)
         {
             this.ioManager = ioManager;
             GameSettings = gameSettings ?? new();
-            this.random = random ?? new();
         }
 
-        public (Board board1, Board board2) InitializeGame()
-        {
-            Board board1;
-            Board board2;
-            bool failedToInit;
-            do
-            {
-                InitalizeGameSettings();
-
-                board1 = CreateBoard(GameSettings.BoardHeight, GameSettings.BoardWidth);
-                board2 = CreateBoard(GameSettings.BoardHeight, GameSettings.BoardWidth);
-
-                var ships = ShipsGenerator.Generate(GameSettings);
-
-                bool shouldRetry = false;
-                do
-                {
-                    try
-                    {
-                        board1.Init(ships);
-                        board2.Init(ships);
-                        failedToInit = false;
-                    }
-                    catch (TimeoutException ex)
-                    {
-                        failedToInit = true;
-                        ioManager.WriteLine($"Failed to initialize ships: " + ex.Message);
-                        shouldRetry = ioManager.GetBooleanInput("Do you want to retry initialization?");
-                    }
-                    catch (Exception ex)
-                    {
-                        failedToInit = true;
-                        shouldRetry = false;
-                        ioManager.WriteLine($"Unexpected error when trying to initialize ships: {Environment.NewLine}"
-                           + ex);
-                    }
-                } while (shouldRetry);
-            } while (failedToInit);
-
-            return (board1, board2);
-        }
-
-        public void InitalizeGameSettings()
+        public GameSettings InitalizeGameSettings()
         {
             ioManager.WriteLine("The default settings are:");
             ioManager.WriteLine(GameSettings.ToString());
@@ -70,6 +26,8 @@ namespace Battleships.Settings
             HandleSettingsModification();
             ioManager.WriteLine("The updated settings are:");
             ioManager.WriteLine(GameSettings.ToString());
+
+            return GameSettings;
         }
 
         private void HandleSettingsModification()
@@ -132,9 +90,6 @@ namespace Battleships.Settings
             ioManager.WriteLine();
         }
 
-        private Board CreateBoard(int height, int width)
-        {
-            return new Board(height, width, new Random(random.Next()));
-        }
+
     }
 }

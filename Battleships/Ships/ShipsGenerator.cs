@@ -3,9 +3,9 @@ using Battleships.Settings;
 
 namespace Battleships.Ships
 {
-    public static class ShipsGenerator
+    public class ShipsGenerator
     {
-        public static List<Ship> Generate(GameSettings gameSettings)
+        public List<Ship> Generate(GameSettings gameSettings)
         {
             var ships = new List<Ship>();
 

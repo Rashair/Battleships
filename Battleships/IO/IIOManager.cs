@@ -1,4 +1,4 @@
-﻿namespace Battleships.Settings
+﻿namespace Battleships.IO
 {
     public interface IIOManager
     {

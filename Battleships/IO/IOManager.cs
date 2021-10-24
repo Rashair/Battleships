@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Battleships.Settings
+namespace Battleships.IO
 {
     public class IOManager : IIOManager
     {

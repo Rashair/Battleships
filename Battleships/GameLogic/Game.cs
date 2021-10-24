@@ -1,4 +1,4 @@
-﻿using Battleships.Settings;
+﻿using Battleships.IO;
 
 namespace Battleships.GameLogic
 {

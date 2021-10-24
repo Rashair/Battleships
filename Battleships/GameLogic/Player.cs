@@ -1,6 +1,6 @@
 ﻿using System;
 using Battleships.Grid;
-using Battleships.Settings;
+using Battleships.IO;
 
 namespace Battleships.GameLogic
 {
@@ -14,7 +14,7 @@ namespace Battleships.GameLogic
         public Guid Token { get; }
         public Board Board { get; }
 
-        public Player(IIOManager ioManager, Board board, string name, Random? random = null)
+        public Player(IIOManager ioManager, Board board, string name, Random random)
         {
             this.ioManager = ioManager;
             Board = board;
@@ -23,7 +23,7 @@ namespace Battleships.GameLogic
 
             board.InitPlayerToken(Token);
 
-            this.random = random ?? new();
+            this.random = random;
             shootingBoard = new bool[Board.Height][];
             for (int i = 0; i < Board.Height; ++i)
             {
